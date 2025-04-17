@@ -17,9 +17,14 @@ public class Hand {
 	
 	public Hand(Card card1, Card card2) {
 		this.cards = new ArrayList<Card>(Arrays.asList(card1, card2));
-		this.handTotal = 0;
+		this.handTotal = card1.getValue() + card2.getValue();
 		this.busted = false;
-		this.hasBlackjack = false;
+		
+		// Determining if the Player's Hand is a Blackjack
+		if (this.handTotal == 21)
+			this.hasBlackjack = true;
+		else
+			this.hasBlackjack = true;
 	}
 	
 	public List<Card> getCards() {
