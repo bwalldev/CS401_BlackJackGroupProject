@@ -42,4 +42,14 @@ public class Hand {
 	public boolean isBlackjack() {
 		return this.hasBlackjack;
 	}
+	
+	public void addCard(Card card) {
+		if (card != null) {
+			this.cards.add(card);
+			this.handTotal += card.getValue();
+			
+			if (this.handTotal > 21) 
+				this.busted = true;
+		}
+	}
 }
