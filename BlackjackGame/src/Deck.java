@@ -14,6 +14,16 @@ public class Deck {
 		resetDeck();
 	}
 	
+	public Card getCard() {
+		Card tempCard = this.cards.getLast();
+		this.cards.removeLast();
+		return tempCard;
+		
+	}
+	public int getDeckSize() {
+		return this.cards.size();
+	}
+	
 	//private helper function
 	private void resetDeck() {
 		this.cards.clear();
