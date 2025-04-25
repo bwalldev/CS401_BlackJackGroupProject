@@ -1,4 +1,33 @@
+import java.util.ArrayList;
 
 public class Game {
+  private ArrayList<Player> players;
+  private Dealer dealer;
+  private Shoe shoe;
+  private int currentPlayer;
+  private Timer timer;
+  private int maxPlayers;
 
+  public Game(ArrayList<Player> players, Dealer dealer, int maxPlayers){
+    this.players = players;
+    this.dealer = dealer;
+    this.maxPlayers = maxPlayers;
+    this.shoe = new Shoe();
+    this.currentPlayer = 0;
+    this.timr = new Timer();
+  }
+
+  public void nextPlayerTurn() {
+  
+  }
+  public void dealerTurn() {
+    
+  }
+  public void dealerTurn() {
+  
+  }
+  public void roundEnd() {
+  
+  }  
+    
 }
