@@ -15,13 +15,26 @@ public class Deck {
 	}
 	
 	public Card getCard() {
+		if (this.isEmpty()) {
+			return null;
+		}
 		Card tempCard = this.cards.getLast();
 		this.cards.removeLast();
 		return tempCard;
 		
 	}
+	
 	public int getDeckSize() {
 		return this.cards.size();
+	}
+	
+	public boolean isEmpty() {
+		if(this.cards.size() == 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 	
 	//private helper functions
