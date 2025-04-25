@@ -9,15 +9,6 @@ public class Server {
 	}
 	
 	// -------------- ClientHandler Class ----------------------------------------------------
-	
-	class Clienthandler implements Runnable {
-		private final Socket clientSocket;
-		
-		public Clienthandler(Socket socket) {
-			this.clientSocket = socket;
-		}
-		
-	
 
 	class ClientHandler implements Runnable {
 		private final Socket clientSocket;
@@ -41,5 +32,11 @@ public class Server {
 			}
 		}
 		
+	}
+
+
+
+	@Override
+	public void run() {
 	}
 }
