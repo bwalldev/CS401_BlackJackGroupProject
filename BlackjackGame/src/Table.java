@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 public class Table {
   private ArrayList<Player> players;
@@ -9,8 +10,8 @@ public class Table {
   public Table(Dealer dealer) {
     this.plaeyrs = new ArrayList<>();
     this.dealer = dealer;
-    this.maxPlayers = 6; //6 players maximum per table
-    this.maxDealers = 2; //2 players maximum per table
+    this.maxPlayers = 6; //6 Players maximum per table
+    this.maxDealers = 1; //1 Dealer maximum per table
   }
 
   public ArrayList<Player> getPlayers() {
