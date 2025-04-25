@@ -24,7 +24,7 @@ public class Hand {
 		if (this.handTotal == 21)
 			this.hasBlackjack = true;
 		else
-			this.hasBlackjack = true;
+			this.hasBlackjack = false;
 	}
 	
 	public List<Card> getCards() {
