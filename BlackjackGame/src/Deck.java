@@ -3,7 +3,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class Deck {
-	private List<Card> cards;
+	protected List<Card> cards;
 	
 	public Deck() {
 		this.cards = new ArrayList<Card>();
@@ -24,14 +24,22 @@ public class Deck {
 		return this.cards.size();
 	}
 	
-	//private helper function
-	private void resetDeck() {
+	//private helper functions
+	protected void resetDeck() {
+		//clear the deck
 		this.cards.clear();
-		
+		//call helper function to fill the deck full of cards
+		fillDeck();
+		//randomly shuffle the items in the deck
+		Collections.shuffle(this.cards);
+	}
+	
+	protected void fillDeck() {
+		//make temp variables to store our current suits and symbols
 		Suit mySuit = Suit.SPADE;
 		Symbol mySymbol = Symbol.ACE;
 		
-		//for the number of different suites
+		//loop for the number of different suites
 		for(int i=0;i<4;i++) {
 			//set up our suit based on the loop counter
 			switch(i) {
@@ -50,7 +58,7 @@ public class Deck {
 			default:
 				System.out.println("suit not properly determined in deck");
 			}
-			//for the number of different symbols
+			//loop for the number of different symbols
 			for(int ii=0;ii<13;ii++) {
 				switch(ii) {
 				case(0):
@@ -98,9 +106,6 @@ public class Deck {
 				//add a new card to the list based on the suit, symbol pair
 				this.cards.add(new Card(mySuit,mySymbol));
 			}
-		}
-		
-		//this randomly shuffles the items in a list
-		Collections.shuffle(this.cards);
+		}	
 	}
 }
