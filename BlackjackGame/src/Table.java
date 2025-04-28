@@ -29,6 +29,10 @@ public class Table {
   public int getMaxDealers() {
     return maxDealers;
   }
+  
+  public Game getGame() {
+	  return this.game;
+  }
 
   public boolean isEmpty() {
     return players.isEmpty();

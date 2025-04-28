@@ -78,4 +78,12 @@ public class Hand {
 				this.busted = true;
 		}
 	}
+	
+	public void clearHand() {
+		this.cards.clear();
+		this.handTotal = 0;
+		this.busted = false;
+		this.hasBlackjack = false;
+		this.aceAsEleven = 0;
+	}
 }

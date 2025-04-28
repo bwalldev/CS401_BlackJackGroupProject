@@ -1,54 +1,48 @@
-public class Dealer {
-	//Attributes 
-   private int id;
-   private String username;
-   private String Password;
-   private Hand hand;
+import java.util.ArrayList;
+
+public class Dealer extends Player {
+
  
-   
+  
    //constructor
-   public Dealer(int id, String username, String password) {
-	   this.id = 0;
-	   this.username = "Dealer";
-	   this.Password = "password";
-	   this.hand = new Hand();
+   public Dealer(String username, String password) {
+	   super(username, password);
 	  }
    
    //getter methods
-   public int getID() {
-	   return id;
-   }
-   
-   public String getUsername() {
-	   return username;
-   }
-	  
-   public String getPassword() {
-	   return Password;
-   }
-   
-   public Hand getHand() {
-	   return hand;
-   }
-   
-   public int getHandvalue() {
-	   return hand.getHandTotal();
+   public int getHandValue() {
+	   return this.getHand().getHandTotal();
    }
    
    public void addCardToHand(Card newcard) {
-	   hand.addCard(newcard);
+	   this.getHand().addCard(newcard);
+	   
    }
    
-   public void startGame() {
-	   hand = new Hand();
-	   dealStartingCard();
+   public void startGame(Table table) {
+	   this.getHand().clearHand();
+	   dealStartingCard(table);
    }
    
 //   public void startRound() {
 //	   
 //   }
    
-   public void dealStartingCard(){
+   public void dealStartingCard(Table table){
+	   ArrayList<Player> players = table.getPlayers();
 	   
+	   for (int i = 0; i < players.size(); i++) {
+		   Player player = players.get(i);
+		   
+		   Card firstCard = table.getGame().getShoe().getCard();
+		   Card secondCard = table.getGame().getShoe().getCard();
+		   player.setHand(firstCard, secondCard);
+	   }
+	   
+	   Card dealerCard1 = table.getGame().getShoe().getCard();
+	   Card dealerCard2 = table.getGame().getShoe().getCard();
+	   this.setHand(dealerCard1, dealerCard2);
    }
+   
+   
 }

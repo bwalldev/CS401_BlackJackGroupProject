@@ -17,6 +17,11 @@ public class Game {
     this.timr = new Timer();
   }
 
+  
+  public Shoe getShoe() {
+	    return this.shoe;
+	}
+  
   public void nextPlayerTurn() {
   
   }
