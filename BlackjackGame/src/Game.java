@@ -13,7 +13,7 @@ public class Game {
 		this.players = players;
 		this.dealer = dealer;
 		this.maxPlayers = maxPlayers;
-		this.shoe = new Shoe(3); // 3 decks in the shoe
+		this.shoe = new Shoe(3); // 3 decks in the shoe, can change if we decide 
 		this.currentPlayer = 0;
 		this.timer = new Timer();
 	}
