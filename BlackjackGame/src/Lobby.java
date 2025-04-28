@@ -10,9 +10,9 @@ public class Lobby {
     }
 
     public void addTable(Table table) {
-      if(tables.size() < maxTables) {
-          tables.add(table);
-      }
+        if(tables.size() < maxTables) {
+            tables.add(table);
+        }
     }
 
     public void removeTable(Table table) {
