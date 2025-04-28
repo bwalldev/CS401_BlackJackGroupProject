@@ -1,0 +1,11 @@
+
+public enum MessageType {
+	HIT,
+	STAY,
+	JOIN_TABLE,
+	LEAVE_TABLE,
+	LOGIN,
+	LOGOUT,
+	WITHDRAWAL,
+	DEPOSIT,
+}
