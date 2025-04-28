@@ -37,9 +37,8 @@ public class Deck {
 	protected void fillDeck() {
 		// Creates every card with every symbol variant
 		for(Suit suit : Suit.values()) {
-			for(Symbol symbol : Symbol.values()) {
+			for(Symbol symbol : Symbol.values())
 				this.cards.add(new Card(suit, symbol));
-			}
 		}
 	}
 }

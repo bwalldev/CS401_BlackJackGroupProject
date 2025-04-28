@@ -8,9 +8,8 @@ public class Shoe extends Deck {
 		this.numDecks = numDecks;
 		this.cards = new ArrayList<Card>();
 		
-		for (int i = 0; i < this.numDecks; i++) {
+		for (int i = 0; i < this.numDecks; i++)
 			fillDeck();
-		}
 		
 		Collections.shuffle(this.cards);
 		
