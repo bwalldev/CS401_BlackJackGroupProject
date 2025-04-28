@@ -42,6 +42,10 @@ public class Player {
 		return this.currBet;
 	}
 	
+	public int getHandValue() {
+		return hand.getHandTotal();
+	}
+	
 	public void setBalance(int balance) {
 		if (balance >= 0)
 			this.balance = balance;
@@ -65,5 +69,9 @@ public class Player {
 	public void depositMoney(int amount) {
 		if (amount >= 1)
 			this.balance += amount;
+	}
+	
+	public void addCardToHand(Card card) {
+		hand.addCard(card);
 	}
 }

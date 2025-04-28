@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Timer;
 
 public class Game {
   private ArrayList<Player> players;
@@ -14,13 +15,13 @@ public class Game {
     this.maxPlayers = maxPlayers;
     this.shoe = new Shoe();
     this.currentPlayer = 0;
-    this.timr = new Timer();
+    this.timer = new Timer();
   }
 
   
   public Shoe getShoe() {
-	    return this.shoe;
-	}
+	  return this.shoe;
+  }
   
   public void nextPlayerTurn() {
   

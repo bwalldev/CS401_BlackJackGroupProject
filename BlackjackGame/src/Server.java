@@ -16,7 +16,6 @@ public class Server {
 		public ClientHandler(Socket socket) {
 			this.clientSocket = socket;
 		}
-		
 
 		@Override
 		public void run() {
@@ -31,10 +30,7 @@ public class Server {
 				except.printStackTrace();
 			}
 		}
-		
 	}
-
-
 
 	@Override
 	public void run() {

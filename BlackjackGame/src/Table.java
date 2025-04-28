@@ -8,7 +8,7 @@ public class Table {
   private Game game;
 
   public Table(Dealer dealer) {
-    this.players = new ArrayList<>();
+    this.players = new ArrayList<Player>();
     this.dealer = dealer;
     this.maxPlayers = 6; //6 Players maximum per table
     this.maxDealers = 1; //1 Dealer maximum per table
