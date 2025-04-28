@@ -4,26 +4,12 @@ import java.util.List;
 
 public class Deck {
 	protected List<Card> cards;
-	protected boolean empty;
 	
 	// Constructor
 	public Deck() {
 		this.cards = new ArrayList<Card>();
 		
 		fillDeck();
-		
-		this.empty = false;
-	}
-	
-	public Card getCard() {
-		Card tempCard = this.cards.getLast();
-		
-		this.cards.removeLast();
-		
-		if (this.cards.size() == 0)
-			this.empty = true;
-		
-		return tempCard;
 	}
 	
 	public int getNumCards() {
@@ -31,7 +17,10 @@ public class Deck {
 	}
 	
 	public boolean isEmpty() {
-		return this.empty;
+		if (this.cards.size() > 0)
+			return false;
+		else
+			return true;
 	}
 	
 	protected void fillDeck() {

@@ -12,12 +12,21 @@ public class Shoe extends Deck {
 			fillDeck();
 		
 		Collections.shuffle(this.cards);
-		
-		this.empty = false;
 	}
 	
 	public int getNumDecks() {
 		return this.numDecks;
+	}
+	
+	public Card getCard() {
+		Card drawCard = null;
+		
+		if (this.cards.size() == 0)
+			reset();
+		
+		drawCard = this.cards.removeLast();
+		
+		return drawCard;
 	}
 
 	protected void reset() {
@@ -31,7 +40,5 @@ public class Shoe extends Deck {
 		
 		//randomly shuffle the items in the deck
 		Collections.shuffle(this.cards);
-		
-		this.empty = false;
 	}
 }
