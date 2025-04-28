@@ -66,4 +66,10 @@ public class Player {
 		if (amount >= 1)
 			this.balance += amount;
 	}
+	
+	
+	public void addCardToHand(Card newcard) {
+		  this.getHand().addCard(newcard);  
+	}
+	
 }
