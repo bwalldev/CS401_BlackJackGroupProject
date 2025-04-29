@@ -9,7 +9,7 @@ public class Game {
     private Timer timer;
     private int maxPlayers;
 
-    public Game(ArrayList<Player> players, Dealer dealer, int maxPlayers){
+    public Game(ArrayList<Player> players, Dealer dealer, int maxPlayers) {
 	this.players = players;
 	this.dealer = dealer;
 	this.maxPlayers = maxPlayers;
@@ -23,7 +23,17 @@ public class Game {
     }
 
     public void nextPlayerTurn() {
-	
+	++currentPlayer;
+	if (currentPlayer >= players.size()) {
+		dealerTurn();
+	} else {
+	    Player player = players.get(currentPlayer);
+	    if (player.getHand().isBusted() || player.getHand().hasStayed()) {
+		    nextPlayerTurn();
+	    } else {
+		System.out.println("It's now " + player.getName() + "'s turn.");
+	    }
+	}
     }
 	
     public void dealerTurn() {
@@ -43,19 +53,25 @@ public class Game {
 	roundEnd();
     }
 	
-    public void playerTurn() {
-		
+    public void roundEnd() {
+	//show what the dealer's score is at the end of each round but not the other players
+	int dealerScore = dealer.getHandValue();
+	System.out.println("Dealer's score: " + dealerScore);
+	  
     }
 	
-    public void roundEnd() {
-		
-    }
     public void hit() {
-
+	Player player = players.get(currentPlayer);
+	player.addCard(shoe.draw());
+	System.out.prinlnplayer.getName() + "hits and now has: " + player.getHandValue());
+	    if(player.getHand().isBusted()) {
+	    	System.out.println(player.getName() + " busted!");
+		nextPlayerTurn();
+	    }
     }
 
     public void stay() {
-	Player player = players.get(currentPlayer);
+	Player player = player.get(currentPlayer);
 	//player has stayed = true
 	player.stay();
 	System.out.println(player.getName() + " stays at: " + player.getHand().getHandValue());
