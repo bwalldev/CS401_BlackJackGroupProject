@@ -11,7 +11,7 @@ public class Server {
 	
 	// Stores players who are logged in
 	private static List<Player> loggedInPlayers = new ArrayList<>();
-	
+	private static List<Dealer> loggedInDealers = new ArrayList<>();
 	public static void main(String[] args) {
 		
 	}
