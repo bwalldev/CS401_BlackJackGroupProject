@@ -30,7 +30,7 @@ public class Game {
 	System.out.println("Dealer's turn!");
 	//dealer take turn
 	while (dealer.getHand().getHandValue() < 12) {
-	    
+	    dealer.getHand().addCardToHand(card); //must complete the method for addCardToHand for daler class
 	    System.out.println("Dealer draws a card. Hand value is now: " + dealer.getHand().getHandValue());
 	    
 	}
@@ -57,6 +57,7 @@ public class Game {
     public void stay() {
 	Player player = players.get(currentPlayer);
 	//player has stayed = true
+	player.stay();
 	System.out.println(player.getName() + " stays at: " + player.getHand();
 	nextPlayerTurn();
     }
