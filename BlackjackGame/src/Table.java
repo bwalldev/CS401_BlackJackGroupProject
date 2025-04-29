@@ -12,10 +12,15 @@ public class Table {
 		this.dealer = dealer;
 		this.maxPlayers = 6; //6 Players maximum per table
 		this.maxDealers = 1; //1 Dealer maximum per table
+		this.game = new Game(this.players, this.dealer, this.maxPlayers);
     }
 
     public ArrayList<Player> getPlayers() {
     	return players;
+    }
+    
+    public int getNumPlayers() {
+    	return players.size();
     }
 
     public Dealer getDealer() {
