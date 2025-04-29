@@ -35,4 +35,11 @@ public class Game {
 	public void roundEnd() {
 		
 	}
+	public void hit() {
+
+	}
+
+	public void stay() {
+		Players player = players.get(currentPlayer);
+	}
 }
