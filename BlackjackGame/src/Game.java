@@ -29,6 +29,17 @@ public class Game {
     public void dealerTurn() {
 	System.out.println("Dealer's turn!");
 	//dealer take turn
+	while (dealer.getHand().getHandValue() < 12) {
+	    
+	    System.out.println("Dealer draws a card. Hand value is now: " + dealer.getHand().getHandValue());
+	    
+	}
+	if (dealer.getHand().isBusted()) {
+	    System.out.println("Dealer busted!");
+	} else {
+	    System.out.println("Dealer stays at: " + dealer.getHand().getHandValue());
+	}
+	
 	roundEnd();
     }
 	
