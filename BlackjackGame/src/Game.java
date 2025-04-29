@@ -58,7 +58,7 @@ public class Game {
 	Player player = players.get(currentPlayer);
 	//player has stayed = true
 	player.stay();
-	System.out.println(player.getName() + " stays at: " + player.getHand();
+	System.out.println(player.getName() + " stays at: " + player.getHand().getHandValue());
 	nextPlayerTurn();
     }
 }
