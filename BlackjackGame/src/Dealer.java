@@ -6,7 +6,7 @@ public class Dealer extends Player {
   
    //constructor
     public Dealer(String username, String password) {
-        super(username, password);
+        super(username, password, 0);
     }
    
    //getter methods
