@@ -1,10 +1,12 @@
 import java.io.BufferedReader;
+import java.io.EOFException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -144,6 +146,10 @@ public class Server {
 							
 					}
 				}
+			} catch (EOFException e) {
+				System.out.println("A Client has disconnected");
+			} catch (SocketException e) {
+				System.out.println("A Client has closed the program without disconnecting.");
 			} catch (IOException | ClassNotFoundException except) {
 				except.printStackTrace();
 			} finally {
