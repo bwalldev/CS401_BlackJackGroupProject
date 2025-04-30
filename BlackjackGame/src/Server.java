@@ -118,6 +118,9 @@ public class Server {
 							
 							break;
 						case LOGOUT:
+							Message logoutMessage = new Message(MessageType.LOGOUT, null, null, "You've been logged out", null, null);
+							
+							outStream.writeObject(logoutMessage);
 							
 							return;
 						case JOIN_TABLE:
@@ -143,6 +146,19 @@ public class Server {
 				}
 			} catch (IOException | ClassNotFoundException except) {
 				except.printStackTrace();
+			} finally {
+				// Making sure to close the Socket, input, and output streams to the Client
+				try {
+					if (inStream != null)
+						inStream.close();
+					
+					if (outStream != null) {
+						outStream.close();
+						clientSocket.close();
+					}
+				} catch (IOException except) {
+					except.printStackTrace();
+				}
 			}
 		}
 		
