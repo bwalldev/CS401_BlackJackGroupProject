@@ -8,4 +8,8 @@ public enum MessageType {
 	LOGOUT,
 	WITHDRAWAL,
 	DEPOSIT,
+	ERROR,
+	WIN,
+	LOSE,
+	BUSTED
 }
