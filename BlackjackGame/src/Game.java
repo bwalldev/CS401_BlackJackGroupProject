@@ -39,7 +39,7 @@ public class Game {
 			System.out.println("Timer method failed" + e);
 		    }
 		}
-	    }
+	    
 	    timer.schedule(task, 30); //30 seconds
 
 	}
