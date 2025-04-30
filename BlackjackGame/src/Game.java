@@ -20,28 +20,33 @@ public class Game {
 	this.currentPlayer = 0;
 	this.timer = new Timer();
     }
+    
     private void startTurnTimer() {
 	try {
-	    if(Timer != null) {
+	    if(timer != null) {
 	        timer.cancel(); //stop timer if there is no time left
-		System.out.println("Timer has stopped");
+	        System.out.println("Timer has stopped");
 	    }
 		
 	    TimerTask turnTimeoutTask = new TimerTask() {
 		public void run() {
 		    try {
-			//skip turn if the timer runs out
+		    	//skip turn if the timer runs out
 		        System.out.println("30 seconds have passed Your time has run out :( ");
-			System.out.println(players.get(currentPlayer).getUsername() + " took too long " + players.get(currentPlayer).getUsername() + "'s turn has now been skipped");
-			nextPlayerTurn();
+		        System.out.println(players.get(currentPlayer).getUsername() + " took too long " + players.get(currentPlayer).getUsername() + "'s turn has now been skipped");
+		        nextPlayerTurn();
 			    //skip turn if the timer runs out
-		    } catch (Exception e) { 
-			System.out.println("Timer method failed" + e);
-		    }
-		}
+		    	} catch (Exception e) { 
+		    		System.out.println("Timer method failed" + e);
+		    	}
+			}
+	    };
 	    
-	    timer.schedule(task, 30); //30 seconds
+	    	timer.schedule(turnTimeoutTask, 30 * 1000); //30 seconds
 
+		} catch (Exception e) {
+			System.out.println("test" + e);
+		}
 	}
 	    
 	    
