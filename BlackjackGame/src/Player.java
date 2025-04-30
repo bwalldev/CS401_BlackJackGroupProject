@@ -5,7 +5,7 @@ public class Player {
     private String username;
     private String password;
     private int balance;
-    private Hand hand;
+    protected Hand hand;
     private int currBet;
     private boolean stayed;
    
