@@ -39,10 +39,9 @@ public class Game {
     public void dealerTurn() {
 	System.out.println("Dealer's turn!");
 	//dealer take turn
-	while (dealer.getHand().getHandValue() < 12) {
+	while (dealer.getHand().getHandValue() < 12) { //The max card value is 11
 	    dealer.getHand().addCardToHand(card); //must complete the method for addCardToHand for daler class
 	    System.out.println("Dealer draws a card. Hand value is now: " + dealer.getHand().getHandValue());
-	    
 	}
 	if (dealer.getHand().isBusted()) {
 	    System.out.println("Dealer busted!");
@@ -57,25 +56,34 @@ public class Game {
 	//show what the dealer's score is at the end of each round but not the other players
 	int dealerScore = dealer.getHandValue();
 	System.out.println("Dealer's score: " + dealerScore);
-	    for (Player player : players) {
-		int playerScore = player.getHandValue();
-		if(player.getHand().isBusted()) {
-		    System.out.println(player.getName() + " has busted. :( Dealer wins.");
-		} else if (delaer.getHand.isBusted()) {
-		    System.out.println("Dealer has busted!");
-		} else if (playerScore > dealerScore) {
-		    System.out.println(player.getName() + " wins!!!");
-		} else if (playerScore == dealerScore) {
-		    System.out.println("It's a tie!!");
-		} else if {
-		    System.out.println(player.getName() + " loses hand :( .");
-		}
+	for (Player player : players) {
+	    int playerScore = player.getHandValue();
+	    if(player.getHand().isBusted()) {
+		System.out.println(player.getName() + " has busted. :( Dealer wins.");
+	    } else if (delaer.getHand.isBusted()) {
+		System.out.println("Dealer has busted!");
+	    } else if (playerScore > dealerScore) {
+		System.out.println(player.getName() + " wins!!!");
+	    } else if (playerScore == dealerScore) {
+		System.out.println("It's a tie!!");
+	    } else if {
+		System.out.println(player.getName() + " loses hand :( .");
+	    }
+	}
+
+	//Reset game for next round
+	for (Player player : players) {
+	    //clear player's hand
+	}
+	//clear player's hand
+	currentPlayer = 0; //set the player counter to 0.
+	System.out.println("Round ended. Ready for next round.");
 	  
     }
 	
     public void hit() {
 	Player player = players.get(currentPlayer);
-	player.addCard(shoe.draw());
+	player.addCard(shoe.getCard());
 	System.out.prinlnplayer.getName() + "hits and now has: " + player.getHandValue());
 	    if(player.getHand().isBusted()) {
 	    	System.out.println(player.getName() + " busted!");
