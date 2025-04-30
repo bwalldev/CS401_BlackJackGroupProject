@@ -118,6 +118,7 @@ public class Server {
 							
 							break;
 						case LOGOUT:
+							Message logout = new Message(MessageType.LOGOUT, null, null, "You've Been logged out.", null, null);
 							
 							return;
 						case JOIN_TABLE:
