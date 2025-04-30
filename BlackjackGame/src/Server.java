@@ -3,57 +3,28 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Server {
+	
 	// Stores players who are logged in
 	private static List<Player> loggedInPlayers = new ArrayList<>();
 	
 	public static void main(String[] args) {
-		// What Client Sockets will connect to
-		ServerSocket serverSocket = null;
 		
-		try {
-			// Initializing the ServerSocket and making sure that the port address can be used again if closed 
-			serverSocket = new ServerSocket(7777);
-			serverSocket.setReuseAddress(true);
-			
-			System.out.println("...Waiting for connection...\n");
-			
-			// Infinite loop that spawns new threads when a new Client connects to the ServerSocket
-			while (true) {
-				Socket socket = serverSocket.accept();
-				
-				// Creating a new handle to use for the new thread
-				ClientHandler clientSocket = new ClientHandler(socket);
-				
-				new Thread(clientSocket).start();
-			}
-		} catch (IOException except) {
-			except.printStackTrace();
-		} finally {
-			// Making sure to close the server's ServerSocket when the server closes
-			if (serverSocket != null)
-				try {
-					serverSocket.close();
-				}
-				catch (IOException except) {
-					except.printStackTrace();
-				}
-		}
 	}
 	
 	// -------------- ClientHandler Class ----------------------------------------------------
 
-	private static class ClientHandler implements Runnable {
+	class ClientHandler implements Runnable {
 		private final Socket clientSocket;
 		
 		public ClientHandler(Socket socket) {
 			this.clientSocket = socket;
 		}
+		
 
 		@Override
 		public void run() {
@@ -63,6 +34,7 @@ public class Server {
 			try {
 				outStream = new ObjectOutputStream(clientSocket.getOutputStream());
 				inStream = new ObjectInputStream(clientSocket.getInputStream());
+				
 				
 				while (true) {
 					Message incomingMessage = (Message) inStream.readObject();
@@ -141,6 +113,8 @@ public class Server {
 							
 					}
 				}
+				
+				
 			} catch (IOException | ClassNotFoundException except) {
 				except.printStackTrace();
 			}
@@ -156,5 +130,13 @@ public class Server {
 			}
 			return null;
 		}
+		
+		// Create a player list for table later
+	}
+
+
+
+	@Override
+	public void run() {
 	}
 }
