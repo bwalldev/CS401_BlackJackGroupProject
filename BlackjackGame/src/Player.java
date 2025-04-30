@@ -8,6 +8,7 @@ public class Player {
     private Hand hand;
     private int currBet;
     private boolean stayed;
+   
 	
 	
     Player(String username, String password) {
@@ -39,7 +40,11 @@ public class Player {
     public Hand getHand() {
 	return this.hand;
     }
-	
+  
+    public int getHandValue() {
+	return this.getHand().getHandTotal();
+    }
+    
     public int getCurrBet() {
 	return this.currBet;
     }
@@ -84,5 +89,5 @@ public class Player {
     public void clearPlayerHand() {
 	hand.clearHand();	//clear cards from the players hand 
 	stayed = false;		//reset stayed flag to false as per in the constructor	
-	
+    }
 }
