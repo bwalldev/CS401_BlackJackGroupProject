@@ -28,7 +28,7 @@ public class Game {
 		dealerTurn();
 	} else {
 	    Player player = players.get(currentPlayer);
-	    if (player.getHand().isBusted() || player.getHand().hasStayed()) {
+	    if (player.getHand().isBusted() || player.hasStayed()) { //has stayed is in player class no need to use getHand() made this mistake too many times
 		    nextPlayerTurn();
 	    } else {
 		System.out.println("It's now " + player.getName() + "'s turn.");
