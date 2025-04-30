@@ -3,7 +3,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Game {
-	private Card card;
+    private Card card;
     private ArrayList<Player> players;
     private Dealer dealer;
     private Shoe shoe;
@@ -47,7 +47,7 @@ public class Game {
 	System.out.println("Dealer's turn!");
 	//dealer take turn
 	while (dealer.getHandValue() < 12) { //The max card value is 11
-	    dealer.getHand().addCard(card); //must complete the method for addCardToHand for dealer class
+	    dealer.getHand().addCard(card); //must complete the method for addCard for dealer class
 	    System.out.println("Dealer draws a card. Hand value is now: " + dealer.getHandValue());
 	}
 	if (dealer.getHand().isBusted()) {
