@@ -70,24 +70,24 @@ public class Server {
 					switch (incomingMessage.getType()) {
 						
 						case LOGIN:
-							String username = incomingMessage.getFrom();
-							String password = incomingMessage.getText();
+							String username = incomingMessage.getUsername();
+							String password = incomingMessage.getPassword();
 							
 							boolean authenticated = false;
 							
 							// Reads from "database" by line separated into parts
-							try (BufferedReader reader = new BufferedReader(new FileReader("users.txt"))) {
+							try (BufferedReader reader = new BufferedReader(new FileReader("src\\users.txt"))) {
 								
 								String line;
 								
 								while ((line = reader.readLine()) != null) {
-									String[] parts = line.split(" ");
+									String[] parts = line.split(",");
 									if (parts.length == 3 && parts[0].equals(username) && parts[1].equals(password)) {
 										int balance = Integer.parseInt(parts[2]);
 										
 										// Get Logged in Player list, if username isn't logged in create a new player
 										if (getLoggedInPlayer(username) == null) {
-											Player newPlayer = new Player(username, password);
+											Player newPlayer = new Player(username, password, balance);
 											Server.loggedInPlayers.add(newPlayer);
 											
 											Message success = new Message(MessageType.LOGIN, username, password, "Login successful.", null, null);
@@ -95,20 +95,20 @@ public class Server {
 						                    
 						                 // Set to true because login matched
 											authenticated = true;
+											break;
 										} else {
 											// Reject logins because username isn't null
 											Message alreadyLoggedIn = new Message(MessageType.LOGIN, username, password, "Already logged in.", null, null);
 											outStream.writeObject(alreadyLoggedIn);
+											authenticated = true;
+											break;
 										}
-										
-										
-										break;
 									}
 								}
 								
 								// No login from file check , send failure message
 								if (!authenticated) {
-						            Message fail = new Message(MessageType.LOGIN, username, password, "Invalid username or password.", null, null);
+						            Message fail = new Message(MessageType.LOGIN, username, password, "Invalid username or password. entered " + username + ", " + password, null, null);
 						            outStream.writeObject(fail);
 						        }
 
