@@ -1,14 +1,52 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
 public class Client {
     private Socket socket;                  
     private BufferedReader input;          
-    private PrintWriter output;            
-                    
+    private PrintWriter output;
+    
+    public static void main(String[] args) {
+    	ObjectInputStream inStream = null;
+    	ObjectOutputStream outStream = null;
+    	
+    	Socket socket = null;
+    	
+    	try {
+    		socket = new Socket("localhost", 7777);
+    		
+    		outStream = new ObjectOutputStream(socket.getOutputStream());
+    		inStream = new ObjectInputStream(socket.getInputStream());
+    	} catch (IOException except) {
+    		except.printStackTrace();
+    	}
+    	
+    	while (true) {
+	    	Message testMessage = new Message(MessageType.LOGIN, "bob", "ross", "TEXT", "Client", null);
+	    	
+	    	try {
+				outStream.writeObject(testMessage);
+				outStream.flush();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+	    	
+	    	Message serverMessage = null;
+	    	
+	    	try {
+				serverMessage = (Message) inStream.readObject();
+			} catch (ClassNotFoundException | IOException e) {
+				e.printStackTrace();
+			}
+	    	
+	    	System.out.println(serverMessage.getText());
+    	}
+    }
 
     //connect the client to the server on localhost
     public void connectToServer(int port) {
