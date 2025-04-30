@@ -111,7 +111,7 @@ public class Server {
 								
 								// No login from file check , send failure message
 								if (!authenticated) {
-						            Message fail = new Message(MessageType.LOGIN, username, password, "Invalid username or password. entered " + username + ", " + password, null, null);
+						            Message fail = new Message(MessageType.LOGIN, username, password, "Invalid username or password entered." + username + ", " + password, null, null);
 						            outStream.writeObject(fail);
 						        }
 

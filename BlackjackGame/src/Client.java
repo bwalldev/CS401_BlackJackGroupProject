@@ -26,13 +26,28 @@ public class Client {
     		except.printStackTrace();
     	}
     	
-    	while (true) {
+    	
 	    	Message testMessage = new Message(MessageType.LOGIN, "bob", "ross", "TEXT", "Client", null);
 	    	
 	    	try {
 				outStream.writeObject(testMessage);
 				outStream.flush();
-			} catch (IOException e) {
+				
+				Message response1 = (Message) inStream.readObject();
+				System.out.println("Response 1: " + response1.getText());
+			} catch (IOException | ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+	    	
+	    	Message testMessageFail = new Message(MessageType.LOGIN, "test", "fail", "TEXT", "Client", null);
+	    	
+	    	try {
+				outStream.writeObject(testMessageFail);
+				outStream.flush();
+				
+				Message response2 = (Message) inStream.readObject();
+				System.out.println("Response 2: " + response2.getText());
+			} catch (IOException | ClassNotFoundException e) {
 				e.printStackTrace();
 			}
 	    	
@@ -45,7 +60,7 @@ public class Client {
 			}
 	    	
 	    	System.out.println(serverMessage.getText());
-    	}
+    	
     }
 
     //connect the client to the server on localhost
