@@ -5,13 +5,13 @@ public class Lobby {
     private int maxTables;
 
     public Lobby() {
-        this.tables = new ArrayList<>();
+        this.tables = new ArrayList<Table>();
         this.maxTables = 3;
     }
 
-    public void addTable(Table table) {
+    public void addTable(Dealer dealer) {
         if(tables.size() < maxTables) {
-            tables.add(table);
+            tables.add(new Table(dealer));
         }
     }
 

@@ -1,21 +1,26 @@
 import java.util.ArrayList;
 
 public class Table {
-	private ArrayList<Player> players;
-	private Dealer dealer;
-	private int maxPlayers;
-	private int maxDealers;
-	private Game game;
+    private ArrayList<Player> players;
+    private Dealer dealer;
+    private int maxPlayers;
+    private int maxDealers;
+    private Game game;
 
-	public Table(Dealer dealer) {
-		this.players = new ArrayList<>();
-		this.dealer = dealer;
-		this.maxPlayers = 6; //6 Players maximum per table
-		this.maxDealers = 1; //1 Dealer maximum per table
+    public Table(Dealer dealer) {
+	this.players = new ArrayList<>();
+	this.dealer = dealer;
+	this.maxPlayers = 6; //6 Players maximum per table
+	this.maxDealers = 1; //1 Dealer maximum per table
+	this.game = new Game(this.players, this.dealer, this.maxPlayers);
     }
 
     public ArrayList<Player> getPlayers() {
     	return players;
+    }
+    
+    public int getNumPlayers() {
+    	return players.size();
     }
 
     public Dealer getDealer() {
