@@ -21,9 +21,29 @@ public class Game {
 	this.timer = new Timer();
     }
     private void startTurnTimer() {
-	if(Timer != null) {
-	    timer.cancel(); //stop timer if there is no time left
+	try {
+	    if(Timer != null) {
+	        timer.cancel(); //stop timer if there is no time left
+		System.out.println("Timer has stopped");
+	    }
+		
+	    TimerTask turnTimeoutTask = new TimerTask() {
+		public void run() {
+		    try {
+			//skip turn if the timer runs out
+		        System.out.println("30 seconds have passed Your time has run out :( ");
+			System.out.println(players.get(currentPlayer).getUsername() + " took too long " + players.get(currentPlayer).getUsername() + "'s turn has now been skipped");
+			nextPlayerTurn();
+			    //skip turn if the timer runs out
+		    } catch (Exception e) { 
+			System.out.println("Timer method failed" + e);
+		    }
+		}
+	    }
+	    timer.schedule(task, 30); //30 seconds
+
 	}
+	    
 	    
     public Shoe getShoe() {
 	return this.shoe;
@@ -89,6 +109,9 @@ public class Game {
     }
 	
     public void hit() {
+	if (timer != null) {
+	    timer.cancel();
+	}
 	Player player = players.get(currentPlayer);
 	player.addCardToHand(shoe.getCard());
 	System.out.println(player.getUsername() + "hits and now has: " + player.getHandValue());
@@ -99,6 +122,9 @@ public class Game {
     }
 
     public void stay() {
+	if (timer != null) {
+	    timer.cancel();
+	}
 	Player player = players.get(currentPlayer);
 	//player has stayed = true
 	player.stay();
