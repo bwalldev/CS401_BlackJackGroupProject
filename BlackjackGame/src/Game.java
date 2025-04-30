@@ -1,12 +1,15 @@
 import java.util.ArrayList;
 import java.util.Timer;
+import java.util.TimerTask;
 
 public class Game {
+    private Card card;
     private ArrayList<Player> players;
     private Dealer dealer;
     private Shoe shoe;
     private int currentPlayer;
     private Timer timer;
+    private TimerTask turnTimeoutTask;
     private int maxPlayers;
 
     public Game(ArrayList<Player> players, Dealer dealer, int maxPlayers) {
@@ -17,7 +20,36 @@ public class Game {
 	this.currentPlayer = 0;
 	this.timer = new Timer();
     }
+    
+    private void startTurnTimer() {
+	try {
+	    if(timer != null) {
+	        timer.cancel(); //stop timer if there is no time left
+	        System.out.println("Timer has stopped");
+	    }
+		
+	    TimerTask turnTimeoutTask = new TimerTask() {
+		public void run() {
+		    try {
+		    	//skip turn if the timer runs out
+		        System.out.println("30 seconds have passed Your time has run out :( ");
+		        System.out.println(players.get(currentPlayer).getUsername() + " took too long " + players.get(currentPlayer).getUsername() + "'s turn has now been skipped");
+		        nextPlayerTurn();
+			    //skip turn if the timer runs out
+		    	} catch (Exception e) { 
+		    		System.out.println("Timer method failed" + e);
+		    	}
+			}
+	    };
+	    
+	    	timer.schedule(turnTimeoutTask, 30 * 1000); //30 seconds
 
+		} catch (Exception e) {
+			System.out.println("test" + e);
+		}
+	}
+	    
+	    
     public Shoe getShoe() {
 	return this.shoe;
     }
@@ -31,7 +63,7 @@ public class Game {
 	    if (player.getHand().isBusted() || player.hasStayed()) { //has stayed is in player class no need to use getHand() made this mistake too many times
 		    nextPlayerTurn();
 	    } else {
-		System.out.println("It's now " + player.getName() + "'s turn.");
+		System.out.println("It's now " + player.getUsername() + "'s turn.");
 	    }
 	}
     }
@@ -39,14 +71,14 @@ public class Game {
     public void dealerTurn() {
 	System.out.println("Dealer's turn!");
 	//dealer take turn
-	while (dealer.getHand().getHandValue() < 12) { //The max card value is 11
-	    dealer.getHand().addCardToHand(card); //must complete the method for addCardToHand for daler class
-	    System.out.println("Dealer draws a card. Hand value is now: " + dealer.getHand().getHandValue());
+	while (dealer.getHandValue() < 12) { //The max card value is 11
+	    dealer.getHand().addCard(card); //must complete the method for addCard for dealer class
+	    System.out.println("Dealer draws a card. Hand value is now: " + dealer.getHandValue());
 	}
 	if (dealer.getHand().isBusted()) {
 	    System.out.println("Dealer busted!");
 	} else {
-	    System.out.println("Dealer stays at: " + dealer.getHand().getHandValue());
+	    System.out.println("Dealer stays at: " + dealer.getHandValue());
 	}
 	
 	roundEnd();
@@ -59,20 +91,20 @@ public class Game {
 	for (Player player : players) {
 	    int playerScore = player.getHandValue();
 	    if(player.getHand().isBusted()) {
-		System.out.println(player.getName() + " has busted. :( Dealer wins.");
-	    } else if (delaer.getHand.isBusted()) {
+		System.out.println(player.getUsername() + " has busted. :( Dealer wins.");
+	    } else if (dealer.getHand().isBusted()) {
 		System.out.println("Dealer has busted!");
 	    } else if (playerScore > dealerScore) {
-		System.out.println(player.getName() + " wins!!!");
+		System.out.println(player.getUsername() + " wins!!!");
 	    } else if (playerScore == dealerScore) {
 		System.out.println("It's a tie!!");
-	    } else if {
-		System.out.println(player.getName() + " loses hand :( .");
+	    } else {
+		System.out.println(player.getUsername() + " loses hand :( .");
 	    }
 	}
 
 	//Reset game for next round
-	for (Player player : players) {
+	for(Player player : players) {
 	    //clear player's hand
 	}
 	//clear player's hand
@@ -82,20 +114,26 @@ public class Game {
     }
 	
     public void hit() {
+	if (timer != null) {
+	    timer.cancel();
+	}
 	Player player = players.get(currentPlayer);
-	player.addCard(shoe.getCard());
-	System.out.prinlnplayer.getName() + "hits and now has: " + player.getHandValue());
+	player.addCardToHand(shoe.getCard());
+	System.out.println(player.getUsername() + "hits and now has: " + player.getHandValue());
 	    if(player.getHand().isBusted()) {
-	    	System.out.println(player.getName() + " busted!");
+	    	System.out.println(player.getUsername() + " busted!");
 		nextPlayerTurn();
 	    }
     }
 
     public void stay() {
-	Player player = player.get(currentPlayer);
+	if (timer != null) {
+	    timer.cancel();
+	}
+	Player player = players.get(currentPlayer);
 	//player has stayed = true
 	player.stay();
-	System.out.println(player.getName() + " stays at: " + player.getHand().getHandValue());
+	System.out.println(player.getUsername() + " stays at: " + player.getHandValue());
 	nextPlayerTurn();
     }
 }
