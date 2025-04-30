@@ -32,7 +32,7 @@ public class Game {
 		    try {
 			//skip turn if the timer runs out
 		        System.out.println("30 seconds have passed Your time has run out :( ");
-			System.out.println(players.get(currentPlayer).getUsername() + " took too long " + players.get(currentPlayer).getUsername() + "'s turn has now been skipped);
+			System.out.println(players.get(currentPlayer).getUsername() + " took too long " + players.get(currentPlayer).getUsername() + "'s turn has now been skipped");
 			nextPlayerTurn();
 			    //skip turn if the timer runs out
 		    } catch (Exception e) { 
