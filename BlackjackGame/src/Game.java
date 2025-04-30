@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Timer;
+import java.util.TimerTask;
 
 public class Game {
 	private Card card;
@@ -8,6 +9,7 @@ public class Game {
     private Shoe shoe;
     private int currentPlayer;
     private Timer timer;
+    private TimerTask turnTimeoutTask;
     private int maxPlayers;
 
     public Game(ArrayList<Player> players, Dealer dealer, int maxPlayers) {
@@ -18,7 +20,11 @@ public class Game {
 	this.currentPlayer = 0;
 	this.timer = new Timer();
     }
-
+    private void startTurnTimer() {
+	if(Timer != null) {
+	    timer.cancel(); //stop timer if there is no time left
+	}
+	    
     public Shoe getShoe() {
 	return this.shoe;
     }
