@@ -10,6 +10,14 @@ public class Client {
     private Socket socket;                  
     private BufferedReader input;          
     private PrintWriter output;
+    private ObjectInputStream inStream;
+    private ObjectOutputStream outStream;
+    
+    public Client(String host, int port) throws IOException {
+        socket = new Socket(host, port);
+        outStream = new ObjectOutputStream(socket.getOutputStream());
+        inStream = new ObjectInputStream(socket.getInputStream());
+    }
     
     public static void main(String[] args) {
     	ObjectInputStream inStream = null;
@@ -51,15 +59,28 @@ public class Client {
 				e.printStackTrace();
 			}
 	    	
-	    	Message serverMessage = null;
+	    	
+	    	Message testDealerLogin = new Message(MessageType.LOGIN, "dealer1", "pass1", "TEXT", "Client", null);
 	    	
 	    	try {
-				serverMessage = (Message) inStream.readObject();
-			} catch (ClassNotFoundException | IOException e) {
-				e.printStackTrace();
-			}
+	    		outStream.writeObject(testDealerLogin);
+	    		outStream.flush();
+	    		
+	    		Message response3 = (Message) inStream.readObject();
+	    		System.out.println("Response 3: " + response3.getText());
+	    	} catch (IOException | ClassNotFoundException e) {
+	    		e.printStackTrace();
+	    	}
 	    	
-	    	System.out.println(serverMessage.getText());
+//	    	Message serverMessage = null;
+	    	
+//	    	try {
+//				serverMessage = (Message) inStream.readObject();
+//			} catch (ClassNotFoundException | IOException e) {
+//				e.printStackTrace();
+//			}
+//	    	
+//	    	System.out.println(serverMessage.getText());
     	
     }
 
@@ -78,6 +99,12 @@ public class Client {
     public void send(String message) {
     	if (output!= null)
     		output.println(message);  
+    }
+    
+    public Message sendMessage(Message message) throws IOException, ClassNotFoundException {
+    	outStream.writeObject(message);
+    	outStream.flush();
+    	return (Message) inStream.readObject();
     }
     
    // receives message from server

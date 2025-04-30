@@ -13,6 +13,7 @@ import java.util.List;
 public class Server {
 	// Stores players who are logged in
 	private static List<Player> loggedInPlayers = new ArrayList<>();
+	private static List<Dealer> loggedInDealers = new ArrayList<>();
 	private static List<Table> tables = new ArrayList<Table>();
 	
 	public static void main(String[] args) {
@@ -79,7 +80,7 @@ public class Server {
 							boolean authenticated = false;
 							
 							// Reads from "database" by line separated into parts
-							try (BufferedReader reader = new BufferedReader(new FileReader("src\\users.txt"))) {
+							try (BufferedReader reader = new BufferedReader(new FileReader("src\\players.txt"))) {
 								
 								String line;
 								
@@ -103,21 +104,51 @@ public class Server {
 											// Reject logins because username isn't null
 											Message alreadyLoggedIn = new Message(MessageType.LOGIN, username, password, "Already logged in.", null, null);
 											outStream.writeObject(alreadyLoggedIn);
+											
+										}
+										authenticated = true;
+										break;
+									}
+								}
+								
+						    } catch (IOException e) {
+						        e.printStackTrace();
+						    }
+
+							if (!authenticated) {
+								try (BufferedReader reader = new BufferedReader(new FileReader("src\\dealers.txt"))) {
+									String line;
+									
+									while ((line = reader.readLine()) != null ) {
+										String[] parts = line.split(",");
+										if (parts.length >= 2 && parts[0].equals(username) && parts[1].equals(password)) {
+											
+											if (getLoggedInDealer(username) == null) {
+												Dealer newDealer = new Dealer(username, password);
+												Server.loggedInDealers.add(newDealer);
+												
+												Message success = new Message(MessageType.LOGIN, username, password, "Dealer login successful.", null, null);
+												outStream.writeObject(success);
+												
+											} else {
+												Message alreadyLoggedIn = new Message(MessageType.LOGIN, username, password, "Dealer already logged in.", null, null);
+												outStream.writeObject(alreadyLoggedIn);
+											}
+											
 											authenticated = true;
 											break;
 										}
 									}
+								} catch (IOException e) {
+									e.printStackTrace();
 								}
-								
-								// No login from file check , send failure message
-								if (!authenticated) {
-						            Message fail = new Message(MessageType.LOGIN, username, password, "Invalid username or password entered." + username + ", " + password, null, null);
-						            outStream.writeObject(fail);
-						        }
-
-						    } catch (IOException e) {
-						        e.printStackTrace();
-						    }
+							}
+							
+							if (!authenticated) {
+								Message fail = new Message(MessageType.LOGIN, username, password, "Invalid username or password.", null, null);
+								outStream.writeObject(fail);
+							}
+							
 							
 							break;
 						case LOGOUT:
@@ -175,6 +206,16 @@ public class Server {
 				Player p = Server.loggedInPlayers.get(i);
 				if (p.getUsername().equals(username)) {
 					return p;
+				}
+			}
+			return null;
+		}
+		
+		private Dealer getLoggedInDealer(String username) {
+			for (int i = 0; i < Server.loggedInDealers.size(); i++) {
+				Dealer d = Server.loggedInDealers.get(i);
+				if (d.getUsername().equals(username)) {
+					return d;
 				}
 			}
 			return null;
