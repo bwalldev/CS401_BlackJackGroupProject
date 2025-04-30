@@ -11,11 +11,11 @@ public class Player {
    
 	
 	
-    Player(String username, String password) {
+    Player(String username, String password, int balance) {
 	this.id = Player.idCount++;
 	this.username = username;
 	this.password = password;
-	this.balance = 0;
+	this.balance = balance;
 	this.hand = new Hand();
 	this.currBet = 0;
 	this.stayed = false;

@@ -87,7 +87,7 @@ public class Server {
 										
 										// Get Logged in Player list, if username isn't logged in create a new player
 										if (getLoggedInPlayer(username) == null) {
-											Player newPlayer = new Player(username, password);
+											Player newPlayer = new Player(username, password, balance);
 											Server.loggedInPlayers.add(newPlayer);
 											
 											Message success = new Message(MessageType.LOGIN, username, password, "Login successful.", null, null);
