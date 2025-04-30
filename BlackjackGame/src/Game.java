@@ -57,6 +57,19 @@ public class Game {
 	//show what the dealer's score is at the end of each round but not the other players
 	int dealerScore = dealer.getHandValue();
 	System.out.println("Dealer's score: " + dealerScore);
+	    for (Player player : players) {
+		int playerScore = player.getHandValue();
+		if(player.getHand().isBusted()) {
+		    System.out.println(player.getName() + " has busted. :( Dealer wins.");
+		} else if (delaer.getHand.isBusted()) {
+		    System.out.println("Dealer has busted!");
+		} else if (playerScore > dealerScore) {
+		    System.out.println(player.getName() + " wins!!!");
+		} else if (playerScore == dealerScore) {
+		    System.out.println("It's a tie!!");
+		} else if {
+		    System.out.println(player.getName() + " loses hand :( .");
+		}
 	  
     }
 	
