@@ -80,5 +80,9 @@ public class Player {
     public void stay() {
         stayed = true;
     }
+
+    public void clearPlayerHand() {
+	hand.clearHand();	//clear cards from the players hand 
+	stayed = false;		//reset stayed flag to false as per in the constructor	
 	
 }
