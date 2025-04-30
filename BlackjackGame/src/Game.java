@@ -40,7 +40,7 @@ public class Game {
 		    }
 		}
 	    }
-	    timer.schedule(task, 30); ///30 seconds
+	    timer.schedule(task, 30); //30 seconds
 
 	}
 	    
