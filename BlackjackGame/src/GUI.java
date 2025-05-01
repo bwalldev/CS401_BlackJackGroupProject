@@ -27,6 +27,35 @@ public class GUI extends JFrame {
 		
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
+
+		startButton = new JButton("Start");
+		hitButton = new JButton("Hit");
+		stayButton = new JButton("Stay");
+
+		buttonPanel.add(startButton);
+		buttonPanel.add(hitButton);
+		buttonPanel.add(stayButton);
+
+		add(buttonPanel, BorderLayout.SOUTH);
+
+		game = new Game();
+
+		startButton.addActionListener(e -> {
+		    game.startGame();
+		    appendMessage("BlackJack game has started.\n");
+		});
+		startButton.addActionListener(e -> {
+		    game.hit();
+		    appendMessage("Player hits.\n");
+		});
+		startButton.addActionListener(e -> {
+		    game.stay();
+		    appendMessage("Player stays.\n");
+		});
 		
+		setVisible(true);
 	}
+	private void appendMessage(String msg) {
+		messageArea.append(msg);
+	}	
 }
