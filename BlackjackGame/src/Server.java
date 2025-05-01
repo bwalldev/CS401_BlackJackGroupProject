@@ -106,8 +106,8 @@ public class Server {
 											outStream.writeObject(alreadyLoggedIn);
 											
 										}
-										authenticated = true;
-										break;
+										
+										//break;
 									}
 								}
 								

@@ -60,11 +60,16 @@ public class Client {
     //disconnects from server
     public void disconnect() {
     	try {
-    		 if (this.inStream != null) 
-    			 this.inStream.close();
-             if (this.outStream != null) 
-            	 this.outStream.close();
-             System.out.println("Disconnected! ");
+    		if (this.inStream != null) 
+    			this.inStream.close();
+    		
+            if (this.outStream != null) 
+            	this.outStream.close();
+            
+            if (this.socket != null)
+            	this.socket.close();
+            
+            System.out.println("Disconnected! ");
     	}
     	catch(IOException e) {
             System.out.println("Error Disconnecting! " + e.getMessage());
