@@ -42,20 +42,20 @@ public class GUI extends JFrame {
 
 		startButton.addActionListener(e -> {
 		    game.startGame();
-		    appendMessage("BlackJack game has started.\n");
+		    appendMessage("BlackJack game has started.\n"); //Example for message class to send between server to client
 		});
 		startButton.addActionListener(e -> {
 		    game.hit();
-		    appendMessage("Player hits.\n");
+		    appendMessage("Player hits.\n"); //Example for message class to send between server to client
 		});
 		startButton.addActionListener(e -> {
 		    game.stay();
-		    appendMessage("Player stays.\n");
+		    appendMessage("Player stays.\n"); //Example for message class to send between server to client
 		});
 		
 		setVisible(true);
 	}
-	private void appendMessage(String msg) {
-		messageArea.append(msg);
+	private void appendMessage(String msg) { //Example for message class to send between server to client
+		messageArea.append(msg);	 //can delete this method once message class works
 	}	
 }
