@@ -11,7 +11,7 @@ public class GUI extends JFrame {
 	
 	public GUI() throws IOException {
 		this.client = new Client();
-		this.setTitle("Welcome to G2 BlackJack");
+		this.setTitle("G2 BlackJack");
 		this.setSize(800, 500);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
