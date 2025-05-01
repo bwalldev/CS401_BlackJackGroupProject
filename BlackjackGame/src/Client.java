@@ -7,127 +7,63 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 public class Client {
-    private Socket socket;                  
-    private BufferedReader input;          
-    private PrintWriter output;
-    private ObjectInputStream inStream;
-    private ObjectOutputStream outStream;
+    private Socket socket;
+    ObjectInputStream inStream;
+	ObjectOutputStream outStream;
+	boolean loggedIn;
     
-    public Client(String host, int port) throws IOException {
-        socket = new Socket(host, port);
-        outStream = new ObjectOutputStream(socket.getOutputStream());
-        inStream = new ObjectInputStream(socket.getInputStream());
-    }
-    
-    public static void main(String[] args) {
+    public Client() throws IOException {
     	ObjectInputStream inStream = null;
     	ObjectOutputStream outStream = null;
-    	
     	Socket socket = null;
-    	
-    	try {
-    		socket = new Socket("localhost", 7777);
-    		
-    		outStream = new ObjectOutputStream(socket.getOutputStream());
-    		inStream = new ObjectInputStream(socket.getInputStream());
-    	} catch (IOException except) {
-    		except.printStackTrace();
-    	}
-    	
-    	
-	    	Message testMessage = new Message(MessageType.LOGIN, "bob", "ross", "TEXT", "Client", null);
-	    	
-	    	try {
-				outStream.writeObject(testMessage);
-				outStream.flush();
-				
-				Message response1 = (Message) inStream.readObject();
-				System.out.println("Response 1: " + response1.getText());
-			} catch (IOException | ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-	    	
-	    	Message testMessageFail = new Message(MessageType.LOGIN, "test", "fail", "TEXT", "Client", null);
-	    	
-	    	try {
-				outStream.writeObject(testMessageFail);
-				outStream.flush();
-				
-				Message response2 = (Message) inStream.readObject();
-				System.out.println("Response 2: " + response2.getText());
-			} catch (IOException | ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-	    	
-	    	
-	    	Message testDealerLogin = new Message(MessageType.LOGIN, "dealer1", "pass1", "TEXT", "Client", null);
-	    	
-	    	try {
-	    		outStream.writeObject(testDealerLogin);
-	    		outStream.flush();
-	    		
-	    		Message response3 = (Message) inStream.readObject();
-	    		System.out.println("Response 3: " + response3.getText());
-	    	} catch (IOException | ClassNotFoundException e) {
-	    		e.printStackTrace();
-	    	}
-	    	
-//	    	Message serverMessage = null;
-	    	
-//	    	try {
-//				serverMessage = (Message) inStream.readObject();
-//			} catch (ClassNotFoundException | IOException e) {
-//				e.printStackTrace();
-//			}
-//	    	
-//	    	System.out.println(serverMessage.getText());
-    	
+    	this.loggedIn = false;
     }
 
     //connect the client to the server on localhost
-    public void connectToServer(int port) {
+    public boolean connectToServer(String ipAddress, int port) {
        try {
-    	   socket= new Socket ("localhost", port);
-    	   input = new BufferedReader (new InputStreamReader(socket.getInputStream()));
-    	   output = new PrintWriter(socket.getOutputStream(), true);
+    	   this.socket= new Socket (ipAddress, port);
+    	   
+    	   this.inStream = new ObjectInputStream (socket.getInputStream());
+    	   this.outStream = new ObjectOutputStream(socket.getOutputStream());
+    	   
+    	   return true;
        } catch (IOException e) {
     	   System.out.println("connection faild! " +  e.getMessage());
+    	   
+    	   return false;
        }
     }
 
    // send message to server
-    public void send(String message) {
-    	if (output!= null)
-    		output.println(message);  
+    public String sendLoginMessage(String username, String password) {
+    	  Message loginMessage = new Message(MessageType.LOGIN, username, password, "login", "Client", null);
+    	  
+    	  try {
+			outStream.writeObject(loginMessage);
+			outStream.flush();
+			
+			Message serverMessage = (Message) inStream.readObject();
+			
+			return serverMessage.getText();
+		  } catch (IOException | ClassNotFoundException except) {
+			except.printStackTrace();
+		  }
+    	  
+    	  return "Login Unsuccessful";
     }
     
-    public Message sendMessage(Message message) throws IOException, ClassNotFoundException {
-    	outStream.writeObject(message);
-    	outStream.flush();
-    	return (Message) inStream.readObject();
-    }
-    
-   // receives message from server
-    public String receive(){
-    	try {
-    		if (input != null) {
-    			return input.readLine();
-    		}
-    		else {
-    			return null;
-    		}
-    	} catch (IOException e) {
-    		System.out.println("receiving faild! " + e.getMessage());
-    		return null;
-    		
-    	}  
+    public void getTableCountMessage() {
+    	Message tableCountMessage = new Message(MessageType.TABLE_COUNT, null, null, null, null, null);
     }
 
     //disconnects from server
     public void disconnect() {
     	try {
-    		 if (input != null) input.close();
-             if (output != null) output.close();
+    		 if (this.inStream != null) 
+    			 this.inStream.close();
+             if (this.outStream != null) 
+            	 this.outStream.close();
              System.out.println("Disconnected! ");
     	}
     	catch(IOException e) {
