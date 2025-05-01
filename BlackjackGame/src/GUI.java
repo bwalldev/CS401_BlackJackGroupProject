@@ -2,9 +2,11 @@ import java.awt.CardLayout;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 
 public class GUI extends JFrame {
 	private CardLayout cardLayout;
+	private Client client;
 	private JPanel panel;
 	private Game game;
 	private JTextArea messageArea;
@@ -17,6 +19,16 @@ public class GUI extends JFrame {
 		this.setLocationRelativeTo(null); //relative to change
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //close the window when you hit close
 		this.setLayout(new BorderLayout());
+		
+		
+			
+			try {
+				client = new Client("localhost", 7777);
+			} catch (IOException e) {
+				JOptionPane.showMessageDialog(this, "Could not connect.");
+			}
+			
+	
 		
 		//create message panel 
 		messageArea = new JTextArea();
@@ -58,4 +70,8 @@ public class GUI extends JFrame {
 	private void appendMessage(String msg) { //Example for message class to send between server to client
 		messageArea.append(msg);	 //can delete this method once message class works
 	}	
+	
+	public static void main(String[] args) {
+		
+	}
 }

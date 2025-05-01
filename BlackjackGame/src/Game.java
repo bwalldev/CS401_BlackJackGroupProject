@@ -128,7 +128,8 @@ public class Game {
 		nextPlayerTurn();
 	    } else {
 		startTurnTimer(); //reset timer
-    }
+	    }
+	}
 
     public void stay() {
 	if (timer != null) {
