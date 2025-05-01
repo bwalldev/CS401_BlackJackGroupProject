@@ -3,6 +3,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -13,7 +14,7 @@ import javax.swing.JTextField;
 public class LoginPanel extends JPanel {
 	public LoginPanel(GUI gui, Client client) {
 		this.setBackground(Color.GREEN);
-		this.setLayout(new FlowLayout());
+		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		JLabel title = new JLabel("Welcome to G2 Blackjack!");
 		title.setFont(new Font("Times New Roman", Font.BOLD, 25));
