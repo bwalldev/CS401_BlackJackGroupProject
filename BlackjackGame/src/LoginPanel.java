@@ -14,7 +14,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 public class LoginPanel extends JPanel {
-	public LoginPanel(GUI gui, Client client) {
+	public LoginPanel(GUI gui) {
 		this.setBackground(Color.GREEN);
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
@@ -33,7 +33,7 @@ public class LoginPanel extends JPanel {
 		JButton loginButton = new JButton("Login");
 		
 		loginButton.addActionListener( e -> {
-			boolean successConnection = client.connectToServer("localhost", 7777);
+			boolean successConnection = gui.getClient().connectToServer("localhost", 7777);
 			
 			if (successConnection == false) {
 				JOptionPane.showMessageDialog(null, "Connection Failed", "Login Unsuccessful", JOptionPane.ERROR_MESSAGE);
@@ -42,7 +42,7 @@ public class LoginPanel extends JPanel {
 				String username = usernameField.getText();
 				String password = new String(passwordField.getPassword());
 				
-				String loginStatus = client.sendLoginMessage(username, password);
+				String loginStatus = gui.getClient().sendLoginMessage(username, password);
 				
 				JOptionPane.showMessageDialog(null, loginStatus, "Login", JOptionPane.INFORMATION_MESSAGE);
 				

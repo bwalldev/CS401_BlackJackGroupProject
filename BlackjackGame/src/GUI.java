@@ -19,8 +19,8 @@ public class GUI extends JFrame {
 		cardLayout = new CardLayout();
 		mainPanel = new JPanel(cardLayout);
 		
-		mainPanel.add(new LoginPanel(this, this.client), "login");
-		mainPanel.add(new LobbyPanel(this, this.client), "lobby");
+		mainPanel.add(new LoginPanel(this), "login");
+		mainPanel.add(new LobbyPanel(this), "lobby");
 		
 		this.add(mainPanel);
 		this.setVisible(true);

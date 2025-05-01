@@ -11,7 +11,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 public class LobbyPanel extends JPanel {
-	public LobbyPanel(GUI gui, Client client) {
+	public LobbyPanel(GUI gui) {
 		this.setBackground(Color.GREEN);
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
