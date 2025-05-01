@@ -53,6 +53,9 @@ public class Client {
     	  return "Login Unsuccessful";
     }
     
+    public void getTableCountMessage() {
+    	Message tableCountMessage = new Message(MessageType.TABLE_COUNT, null, null, null, null, null);
+    }
 
     //disconnects from server
     public void disconnect() {

@@ -18,6 +18,8 @@ public class LobbyPanel extends JPanel {
 		JLabel title = new JLabel("Lobby Menu!");
 		title.setFont(new Font("Times New Roman", Font.BOLD, 25));
 		
+		
+		
 		this.add(title);
 	}
 }
