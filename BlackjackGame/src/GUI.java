@@ -8,8 +8,10 @@ public class GUI extends JFrame {
 	private CardLayout cardLayout;
 	private JPanel mainPanel;
 	private Client client;
+	private Player player;
 	
 	public GUI() throws IOException {
+		this.player = new Player("Player 1", "", 0);
 		this.client = new Client();
 		this.setTitle("G2 BlackJack");
 		this.setSize(800, 500);
@@ -32,6 +34,14 @@ public class GUI extends JFrame {
 	
 	public Client getClient() {
 		return this.client;
+	}
+	
+	public Player getPlayer() {
+		return this.player;
+	}
+	
+	public void setPlayer(String username, String password, int balance) {
+		this.player = new Player(username, password, balance);
 	}
 	
 	public CardLayout getCardLayout() {

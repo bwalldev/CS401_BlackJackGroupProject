@@ -47,6 +47,7 @@ public class LoginPanel extends JPanel {
 				JOptionPane.showMessageDialog(null, loginStatus, "Login", JOptionPane.INFORMATION_MESSAGE);
 				
 				if (loginStatus.equals("Login successful.")) {
+					gui.setPlayer(username, password, 0);
 					gui.getCardLayout().show(gui.getMainPanel(), "lobby");
 				}
 			}

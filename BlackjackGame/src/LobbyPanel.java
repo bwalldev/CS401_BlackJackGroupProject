@@ -15,7 +15,7 @@ public class LobbyPanel extends JPanel {
 		this.setBackground(Color.GREEN);
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
-		JLabel title = new JLabel("Lobby Menu!");
+		JLabel title = new JLabel("Welcome to the lobby " + gui.getPlayer().getUsername());
 		title.setFont(new Font("Times New Roman", Font.BOLD, 25));
 		
 		
