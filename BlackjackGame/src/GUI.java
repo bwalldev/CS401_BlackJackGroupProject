@@ -20,6 +20,7 @@ public class GUI extends JFrame {
 		mainPanel = new JPanel(cardLayout);
 		
 		mainPanel.add(new LoginPanel(this, this.client), "login");
+		mainPanel.add(new LobbyPanel(this, this.client), "lobby");
 		
 		this.add(mainPanel);
 		this.setVisible(true);
@@ -31,6 +32,14 @@ public class GUI extends JFrame {
 	
 	public Client getClient() {
 		return this.client;
+	}
+	
+	public CardLayout getCardLayout() {
+		return this.cardLayout;
+	}
+	
+	public JPanel getMainPanel() {
+		return this.mainPanel;
 	}
 	
 	public static void main(String[] args) throws IOException {

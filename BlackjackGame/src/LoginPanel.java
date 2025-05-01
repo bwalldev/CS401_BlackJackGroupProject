@@ -1,8 +1,10 @@
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -34,19 +36,25 @@ public class LoginPanel extends JPanel {
 			boolean successConnection = client.connectToServer("localhost", 7777);
 			
 			if (successConnection == false) {
-				JOptionPane.showMessageDialog(null, "Wrong username/password match", "Login Unsuccessful", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Connection Failed", "Login Unsuccessful", JOptionPane.ERROR_MESSAGE);
 			}
-			
-			String username = usernameField.getText();
-			String password = new String(passwordField.getPassword());
-			
-			String loginStatus = client.sendLoginMessage(username, password);
-			
-			JOptionPane.showMessageDialog(null, loginStatus, "Login", JOptionPane.INFORMATION_MESSAGE);
+			else {
+				String username = usernameField.getText();
+				String password = new String(passwordField.getPassword());
+				
+				String loginStatus = client.sendLoginMessage(username, password);
+				
+				JOptionPane.showMessageDialog(null, loginStatus, "Login", JOptionPane.INFORMATION_MESSAGE);
+				
+				if (loginStatus.equals("Login successful.")) {
+					gui.getCardLayout().show(gui.getMainPanel(), "lobby");
+				}
+			}
 		});
 		
 		this.add(title);
 		this.add(subtitle);
+		this.add(Box.createRigidArea(new Dimension(0,300)));
 		this.add(usernameLabel);
 		this.add(usernameField);
 		this.add(passwordLabel);
