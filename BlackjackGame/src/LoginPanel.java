@@ -48,6 +48,10 @@ public class LoginPanel extends JPanel {
 				
 				if (loginStatus.equals("Login successful.")) {
 					gui.setPlayer(username, password, 0);
+					
+					gui.getMainPanel().remove(gui.getMainPanel().getComponent(1));
+					gui.getMainPanel().add(new LobbyPanel(gui), "lobby");
+					
 					gui.getCardLayout().show(gui.getMainPanel(), "lobby");
 				}
 			}

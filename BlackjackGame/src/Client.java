@@ -13,9 +13,9 @@ public class Client {
 	boolean loggedIn;
     
     public Client() throws IOException {
-    	ObjectInputStream inStream = null;
-    	ObjectOutputStream outStream = null;
-    	Socket socket = null;
+    	this.inStream = null;
+    	this.outStream = null;
+    	this.socket = null;
     	this.loggedIn = false;
     }
 
@@ -24,8 +24,8 @@ public class Client {
        try {
     	   this.socket= new Socket (ipAddress, port);
     	   
-    	   this.inStream = new ObjectInputStream (socket.getInputStream());
-    	   this.outStream = new ObjectOutputStream(socket.getOutputStream());
+    	   this.outStream = new ObjectOutputStream(this.socket.getOutputStream());
+    	   this.inStream = new ObjectInputStream (this.socket.getInputStream());
     	   
     	   return true;
        } catch (IOException e) {
@@ -40,10 +40,12 @@ public class Client {
     	  Message loginMessage = new Message(MessageType.LOGIN, username, password, "login", "Client", null);
     	  
     	  try {
-			outStream.writeObject(loginMessage);
-			outStream.flush();
+			this.outStream.writeObject(loginMessage);
+			this.outStream.flush();
 			
 			Message serverMessage = (Message) inStream.readObject();
+			
+			this.loggedIn = true;
 			
 			return serverMessage.getText();
 		  } catch (IOException | ClassNotFoundException except) {
@@ -53,8 +55,24 @@ public class Client {
     	  return "Login Unsuccessful";
     }
     
-    public void getTableCountMessage() {
+    public int getTableCountMessage() {
     	Message tableCountMessage = new Message(MessageType.TABLE_COUNT, null, null, null, null, null);
+    	
+    	try {
+    		this.outStream.writeObject(tableCountMessage);
+    		
+    		Message serverMessage = (Message) inStream.readObject();
+    		
+    		return Integer.parseInt(serverMessage.getText());
+    	} catch(IOException | ClassNotFoundException except) {
+    		except.printStackTrace();
+    	}
+    	
+    	return 0;
+    }
+    
+    public boolean getLogginIn() {
+    	return this.loggedIn;
     }
 
     //disconnects from server

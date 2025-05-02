@@ -14,4 +14,14 @@ public enum Symbol {
 	JACK(10),
 	QUEEN(10),
 	KING(10);
+	
+	private int symbolValue;
+	
+	Symbol(int val) {
+		this.symbolValue = val;
+	}
+	
+	public int getValue() {
+		return this.symbolValue;
+	}
 }
