@@ -9,8 +9,8 @@ import java.net.Socket;
 public class Client {
     private Socket socket;
     ObjectInputStream inStream;
-	ObjectOutputStream outStream;
-	boolean loggedIn;
+    ObjectOutputStream outStream;
+    boolean loggedIn;
     
     public Client() throws IOException {
     	ObjectInputStream inStream = null;
@@ -40,12 +40,12 @@ public class Client {
     	  Message loginMessage = new Message(MessageType.LOGIN, username, password, "login", "Client", null);
     	  
     	  try {
-			outStream.writeObject(loginMessage);
-			outStream.flush();
+		outStream.writeObject(loginMessage);
+		outStream.flush();
 			
-			Message serverMessage = (Message) inStream.readObject();
+		Message serverMessage = (Message) inStream.readObject();
 			
-			return serverMessage.getText();
+		return serverMessage.getText();
 		  } catch (IOException | ClassNotFoundException except) {
 			except.printStackTrace();
 		  }
@@ -60,8 +60,8 @@ public class Client {
     //disconnects from server
     public void disconnect() {
     	try {
-    		if (this.inStream != null) 
-    			this.inStream.close();
+    	    if (this.inStream != null) 
+    		this.inStream.close();
     		
             if (this.outStream != null) 
             	this.outStream.close();
