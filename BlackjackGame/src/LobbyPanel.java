@@ -32,7 +32,7 @@ public class LobbyPanel extends JPanel {
 		
 		this.add(title);
 		
-		if (gui.getClient().getLogginIn()) {
+		if (gui.getClient().getLoggedIn()) {
 		    int tableCount = gui.getClient().getTableCountMessage();
 		
 		    for (int i = 0; i < tableCount; i++) {
