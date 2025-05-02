@@ -18,14 +18,22 @@ public class LobbyPanel extends JPanel {
 		this.setBackground(Color.GREEN);
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
-		JLabel title = new JLabel("Welcome to the lobby " + gui.getPlayer().getUsername());
+		JLabel title = new JLabel("Table Lobby");
 		title.setFont(new Font("Times New Roman", Font.BOLD, 25));
+		title.setAlignmentX(CENTER_ALIGNMENT);
+		title.setAlignmentY(CENTER_ALIGNMENT);
 		
 		JButton lobbyButton1 = new JButton("Table 1");
 		JButton lobbyButton2 = new JButton("Table 2");
 		JButton lobbyButton3 = new JButton("Table 3");
 		
-		JButton createtableButton = new JButton("Create Table");
+		lobbyButton1.setAlignmentX(CENTER_ALIGNMENT);
+		lobbyButton2.setAlignmentX(CENTER_ALIGNMENT);
+		lobbyButton3.setAlignmentX(CENTER_ALIGNMENT);
+		
+		JButton createTableButton = new JButton("Create Table");
+		
+		createTableButton.setAlignmentX(CENTER_ALIGNMENT);
 		
 		List<JButton> lobbyButtons = new ArrayList<>();
 		lobbyButtons.add(lobbyButton1);
@@ -34,7 +42,7 @@ public class LobbyPanel extends JPanel {
 		
 		this.add(title);
 		
-		if(!(gui.getPlayer() instanceof Player)) {
+		if(!(gui.getPlayer() instanceof Dealer)) {
 			if (gui.getClient().getLoggedIn()) {
 			    int tableCount = gui.getClient().getTableCountMessage();
 			
@@ -45,7 +53,7 @@ public class LobbyPanel extends JPanel {
 		}
 		else {
 			if (gui.getClient().getLoggedIn()) {
-				this.add(createtableButton);
+				this.add(createTableButton);
 			}
 		}
 	}
