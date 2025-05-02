@@ -25,6 +25,8 @@ public class LobbyPanel extends JPanel {
 		JButton lobbyButton2 = new JButton("Table 2");
 		JButton lobbyButton3 = new JButton("Table 3");
 		
+		JButton createtableButton = new JButton("Create Table");
+		
 		List<JButton> lobbyButtons = new ArrayList<>();
 		lobbyButtons.add(lobbyButton1);
 		lobbyButtons.add(lobbyButton2);
@@ -32,12 +34,19 @@ public class LobbyPanel extends JPanel {
 		
 		this.add(title);
 		
-		if (gui.getClient().getLoggedIn()) {
-		    int tableCount = gui.getClient().getTableCountMessage();
-		
-		    for (int i = 0; i < tableCount; i++) {
-			    this.add(lobbyButtons.get(i));
-		    }
+		if(!(gui.getPlayer() instanceof Player)) {
+			if (gui.getClient().getLoggedIn()) {
+			    int tableCount = gui.getClient().getTableCountMessage();
+			
+			    for (int i = 0; i < tableCount; i++) {
+				    this.add(lobbyButtons.get(i));
+			    }
+			}
+		}
+		else {
+			if (gui.getClient().getLoggedIn()) {
+				this.add(createtableButton);
+			}
 		}
 	}
 }
