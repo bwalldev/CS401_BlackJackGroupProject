@@ -44,6 +44,10 @@ public class GUI extends JFrame {
 		this.player = new Player(username, password, balance);
 	}
 	
+	public void setDealer(String username, String password) {
+		this.player = new Dealer(username, password);
+	}
+	
 	public CardLayout getCardLayout() {
 		return this.cardLayout;
 	}
