@@ -8,20 +8,15 @@ public class GUI extends JFrame {
 	private CardLayout cardLayout;
 	private JPanel mainPanel;
 	private Client client;
+	private Player player;
 	
 	public GUI() throws IOException {
+		this.player = new Player("Player 1", "", 0);
 		this.client = new Client();
-		this.setTitle("Welcome to G2 BlackJack");
+		this.setTitle("G2 BlackJack");
 		this.setSize(800, 500);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.addWindowListener(new java.awt.event.WindowAdapter() {
-			@Override
-			public void windowClosing(java.awt.event.WindowEvent event) {
-				if (client != null)
-					client.disconnect();
-			}
-		});
 		
 		cardLayout = new CardLayout();
 		mainPanel = new JPanel(cardLayout);
@@ -39,6 +34,14 @@ public class GUI extends JFrame {
 	
 	public Client getClient() {
 		return this.client;
+	}
+	
+	public Player getPlayer() {
+		return this.player;
+	}
+	
+	public void setPlayer(String username, String password, int balance) {
+		this.player = new Player(username, password, balance);
 	}
 	
 	public CardLayout getCardLayout() {
