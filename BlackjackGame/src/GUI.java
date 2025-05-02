@@ -17,6 +17,13 @@ public class GUI extends JFrame {
 		this.setSize(800, 500);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.addWindowListener(new java.awt.event.WindowAdapter() {
+			@Override
+			public void windowClosing(java.awt.event.WindowEvent event) {
+				if (client != null)
+					client.disconnect();
+			}
+		});
 		
 		cardLayout = new CardLayout();
 		mainPanel = new JPanel(cardLayout);
