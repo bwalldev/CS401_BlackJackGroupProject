@@ -54,6 +54,11 @@ public class LoginPanel extends JPanel {
 				JOptionPane.showMessageDialog(null, loginStatus, "Login", JOptionPane.INFORMATION_MESSAGE);
 				
 				if (loginStatus.equals("Login successful.")) {
+					gui.setPlayer(username, password, 0);
+					
+					gui.getMainPanel().remove(gui.getMainPanel().getComponent(1));
+					gui.getMainPanel().add(new LobbyPanel(gui), "lobby");
+					
 					gui.getCardLayout().show(gui.getMainPanel(), "lobby");
 				}
 			}
@@ -61,7 +66,6 @@ public class LoginPanel extends JPanel {
 		
 		this.add(title);
 		this.add(subtitle);
-		this.add(Box.createRigidArea(new Dimension(0,100)));
 		this.add(usernameLabel);
 		this.add(usernameField);
 		this.add(passwordLabel);

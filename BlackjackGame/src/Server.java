@@ -19,6 +19,7 @@ public class Server {
 	public static void main(String[] args) {
 		// What Client Sockets will connect to
 		ServerSocket serverSocket = null;
+		tables.add(new Table(new Dealer("dealer1", "pass1")));
 		
 		try {
 			// Initializing the ServerSocket and making sure that the port address can be used again if closed 
@@ -175,6 +176,12 @@ public class Server {
 						case DEPOSIT:
 							
 							break;
+						case TABLE_COUNT:
+							Message outMessage = new Message(MessageType.TABLE_COUNT, null, null, String.valueOf(tables.size()), null, null);
+							
+							outStream.writeObject(outMessage);
+							
+							break;
 							
 					}
 				}
@@ -187,8 +194,10 @@ public class Server {
 			} finally {
 				// Making sure to close the Socket, input, and output streams to the Client
 				try {
-					if (inStream != null)
+					if (inStream != null) {
 						inStream.close();
+						clientSocket.close();
+					}
 					
 					if (outStream != null) {
 						outStream.close();
