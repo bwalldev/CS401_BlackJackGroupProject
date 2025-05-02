@@ -17,19 +17,27 @@ public class LoginPanel extends JPanel {
 		this.setBackground(Color.GREEN);
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
-		JLabel title = new JLabel("Welcome to G2 Blackjack!");
-		title.setFont(new Font("Times New Roman", Font.BOLD, 25));
+		JLabel title = new JLabel("Welcome to G2 BlackJack!", JLabel.CENTER);
+		title.setFont(new Font("broadway", Font.BOLD, 40));
+		title.setForeground(Color.WHITE);
+		title.setAlignmentX(CENTER_ALIGNMENT);
 		
-		JLabel subtitle = new JLabel("Login");
+		JLabel subtitle = new JLabel("Login to start");
 		subtitle.setFont(new Font("Times New Roman", Font.BOLD, 20));
+		subtitle.setAlignmentX(CENTER_ALIGNMENT);
 		
 		JLabel usernameLabel = new JLabel("Enter Username: ");
 		JTextField usernameField = new JTextField(10);
+		usernameField.setMaximumSize(new Dimension(200, 25));
+		usernameLabel.setAlignmentX(CENTER_ALIGNMENT);
 		
 		JLabel passwordLabel = new JLabel("Enter password: ");
 		JPasswordField passwordField = new JPasswordField(10);
+		passwordField.setMaximumSize(new Dimension(200, 25));
+		passwordLabel.setAlignmentX(CENTER_ALIGNMENT);
 		
 		JButton loginButton = new JButton("Login");
+		loginButton.setAlignmentX(CENTER_ALIGNMENT);
 		
 		loginButton.addActionListener( e -> {
 			boolean successConnection = gui.getClient().connectToServer("localhost", 7777);
@@ -58,7 +66,6 @@ public class LoginPanel extends JPanel {
 		
 		this.add(title);
 		this.add(subtitle);
-		this.add(Box.createRigidArea(new Dimension(0,300)));
 		this.add(usernameLabel);
 		this.add(usernameField);
 		this.add(passwordLabel);

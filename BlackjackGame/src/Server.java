@@ -194,8 +194,10 @@ public class Server {
 			} finally {
 				// Making sure to close the Socket, input, and output streams to the Client
 				try {
-					if (inStream != null)
+					if (inStream != null) {
 						inStream.close();
+						clientSocket.close();
+					}
 					
 					if (outStream != null) {
 						outStream.close();

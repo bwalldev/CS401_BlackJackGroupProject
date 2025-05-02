@@ -71,7 +71,7 @@ public class Client {
     	return 0;
     }
     
-    public boolean getLogginIn() {
+    public boolean getLoggedIn() {
     	return this.loggedIn;
     }
 
