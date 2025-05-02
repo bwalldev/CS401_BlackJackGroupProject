@@ -61,6 +61,14 @@ public class LoginPanel extends JPanel {
 					
 					gui.getCardLayout().show(gui.getMainPanel(), "lobby");
 				}
+				else if (loginStatus.equals("Dealer login successful.")) {
+					gui.setDealer(username, password);
+					
+					gui.getMainPanel().remove(gui.getMainPanel().getComponent(1));
+					gui.getMainPanel().add(new LobbyPanel(gui),  "lobby");
+					
+					gui.getCardLayout().show(gui.getMainPanel(), "lobby");
+				}
 			}
 		});
 		
