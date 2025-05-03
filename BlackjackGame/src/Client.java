@@ -213,4 +213,48 @@ public class Client {
     	}	
        
     }
+    
+    
+    public void startListening() {
+    	Thread listenerThread = new Thread(new Runnable() {
+    		public void run() {
+    			try {
+    				while(true) {
+    					Message msg = (Message) inStream.readObject();
+    					handleServerMessage(msg);
+    				}
+    			} catch (IOException | ClassNotFoundException e) {
+    				System.out.println("Disconnected from Server");
+    			}
+    		}
+    	});
+    	listenerThread.start();
+    }
+    
+    private void handleServerMessage(Message msg) {
+    	
+    	switch (msg.getType()) {
+    	case LOGIN:
+    		break;
+    	case LOGOUT:
+    		break;
+    	case JOIN_TABLE:
+    		break;
+    	case LEAVE_TABLE:
+    		break;
+    	case HIT:
+    		break;
+    	case STAY:
+    		break;
+    	case WITHDRAWAL:
+    		break;
+    	case DEPOSIT:
+    		break;
+    	case TABLE_COUNT:
+    		break;
+		default:
+			break;
+    	}
+    	
+    }
 }
