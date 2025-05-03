@@ -70,15 +70,9 @@ public class Server {
 
 		@Override
 		public void run() {
-			ObjectOutputStream outStream = null;
-			ObjectInputStream inStream = null;
-			
 			try {
-				outStream = new ObjectOutputStream(clientSocket.getOutputStream());
-				inStream = new ObjectInputStream(clientSocket.getInputStream());
-				
 				while (true) {
-					Message incomingMessage = (Message) inStream.readObject();
+					Message incomingMessage = (Message) this.inStream.readObject();
 					handleMessage(incomingMessage);
 					
 				}
@@ -91,15 +85,14 @@ public class Server {
 			} finally {
 				// Making sure to close the Socket, input, and output streams to the Client
 				try {
-					if (inStream != null) {
-						inStream.close();
-						clientSocket.close();
-					}
+					if (this.inStream != null)
+						this.inStream.close();
 					
-					if (outStream != null) {
-						outStream.close();
-						clientSocket.close();
-					}
+					if (this.outStream != null)
+						this.outStream.close();
+					
+					if (this.clientSocket != null)
+						this.clientSocket.close();
 				} catch (IOException except) {
 					except.printStackTrace();
 				}
@@ -133,7 +126,7 @@ public class Server {
 									Server.loggedInPlayers.add(newPlayer);
 									
 									Message success = new Message(MessageType.LOGIN, username, password, balance, "Login successful.", null, null, -1 );
-				                    outStream.writeObject(success);
+				                    this.outStream.writeObject(success);
 				                    
 				                 // Set to true because login matched
 									authenticated = true;
@@ -141,7 +134,7 @@ public class Server {
 								} else {
 									// Reject logins because username isn't null
 									Message alreadyLoggedIn = new Message(MessageType.LOGIN, username, password, balance, "Already logged in.", null, null, -1);
-									outStream.writeObject(alreadyLoggedIn);
+									this.outStream.writeObject(alreadyLoggedIn);
 									
 								}
 								
@@ -166,11 +159,11 @@ public class Server {
 										Server.loggedInDealers.add(newDealer);
 										
 										Message success = new Message(MessageType.LOGIN, username, password, 0, "Dealer login successful.", null, null, -1);
-										outStream.writeObject(success);
+										this.outStream.writeObject(success);
 										
 									} else {
 										Message alreadyLoggedIn = new Message(MessageType.LOGIN, username, password, 0, "Dealer already logged in.", null, null, -1);
-										outStream.writeObject(alreadyLoggedIn);
+										this.outStream.writeObject(alreadyLoggedIn);
 									}
 									
 									authenticated = true;
@@ -184,7 +177,7 @@ public class Server {
 					
 					if (!authenticated) {
 						Message fail = new Message(MessageType.LOGIN, username, password, 0, "Invalid username or password.", null, null, -1);
-						outStream.writeObject(fail);
+						this.outStream.writeObject(fail);
 					}
 					
 					
@@ -192,7 +185,7 @@ public class Server {
 				case LOGOUT:
 					Message logoutMessage = new Message(MessageType.LOGOUT, null, null, 0, "You've been logged out", null, null, -1);
 					
-					outStream.writeObject(logoutMessage);
+					this.outStream.writeObject(logoutMessage);
 					
 					return;
 				case JOIN_TABLE:
@@ -216,7 +209,7 @@ public class Server {
 				case TABLE_COUNT:
 					Message outMessage = new Message(MessageType.TABLE_COUNT, null, null, 0, String.valueOf(tables.size()), null, null, -1);
 					
-					outStream.writeObject(outMessage);
+					this.outStream.writeObject(outMessage);
 					
 					break;
 					
