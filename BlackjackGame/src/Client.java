@@ -206,6 +206,8 @@ public class Client {
     			 this.inStream.close();
              if (this.outStream != null) 
             	 this.outStream.close();
+             if (this.socket != null && this.socket.isClosed() == false)
+            	 this.socket.close();
              System.out.println("Disconnected! ");
     	}
     	catch(IOException e) {
