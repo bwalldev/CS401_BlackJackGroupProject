@@ -37,7 +37,7 @@ public class Client {
 
    // send message to server
     public String sendLoginMessage(String username, String password) {
-    	  Message loginMessage = new Message(MessageType.LOGIN, username, password, "login", "Client", null);
+    	  Message loginMessage = new Message(MessageType.LOGIN, username, password, 0, "login", "Client", null, -1);
     	  
     	  try {
 			this.outStream.writeObject(loginMessage);
@@ -55,8 +55,132 @@ public class Client {
     	  return "Login Unsuccessful";
     }
     
+    public String sendLogoutMessage(String username, String password) {
+  	  Message logoutMessage = new Message(MessageType.LOGOUT, username, password, 0, "logout", "Client", null, -1);
+  	  
+  	  try {
+			this.outStream.writeObject(logoutMessage);
+			this.outStream.flush();
+			
+			Message serverMessage = (Message) inStream.readObject();
+			
+			this.loggedIn = true;
+			
+			return serverMessage.getText();
+		  } catch (IOException | ClassNotFoundException except) {
+			except.printStackTrace();
+		  }
+  	  
+  	  return "Logout Unsuccessful";
+  }
+    
+    public String sendHitMessage(String username, Card card) {
+    	Message hitMessage = new Message(MessageType.HIT, username, null, 0, "Hit", "Client", card, -1);
+    	
+    	try {
+    		this.outStream.writeObject(hitMessage);
+    		this.outStream.flush();
+    		
+    		Message serverMessage = (Message) inStream.readObject();
+    		
+    		return serverMessage.getText();
+    	} catch (IOException | ClassNotFoundException except) {
+    		except.printStackTrace();
+    	}
+    	
+    	return "Hit";
+    }
+    
+    public String sendStayMessage(String username) {
+    	
+    	Message stayMessage = new Message(MessageType.STAY, username, null, 0, "Stay", "Client", null, -1);
+	
+    	try {
+    		this.outStream.writeObject(stayMessage);
+    		this.outStream.flush();
+		
+    		Message serverMessage = (Message) inStream.readObject();
+		
+    		return serverMessage.getText();
+    	} catch (IOException | ClassNotFoundException except) {
+    		except.printStackTrace();
+    	}
+	
+    	return "Stay";
+    }
+    
+    public String sendJoinTableMessage(String username, int tableID) {
+    	Message joinMessage = new Message(MessageType.JOIN_TABLE, username, null, 0, "Join Table", "Client", null, tableID);
+    	
+    	try {
+    		this.outStream.writeObject(joinMessage);
+    		this.outStream.flush();
+    		
+    		Message serverMessage = (Message) inStream.readObject();
+    		
+    		return serverMessage.getText();
+    		
+    	} catch (IOException | ClassNotFoundException except) {
+    		except.printStackTrace();
+    	}
+    	return "Joined Table";
+    }
+    
+    public String sendLeaveTableMessage(String username, int tableID) {
+    	Message leaveMessage = new Message(MessageType.LEAVE_TABLE, username, null, 0, "Leave Table", "Client", null, tableID);
+    	
+    	try {
+    		this.outStream.writeObject(leaveMessage);
+    		this.outStream.flush();
+    		
+    		Message serverMessage = (Message) inStream.readObject();
+    		
+    		return serverMessage.getText();
+    		
+    	} catch (IOException | ClassNotFoundException except) {
+    		except.printStackTrace();
+    	}
+    	return "Left Table";
+    }
+    
+    public String sendDepositMessage(String username, int balance) {
+    	Message depositMessage = new Message(MessageType.DEPOSIT, username, null, balance, "Deposit", "Client", null, -1);
+    	
+    	try {
+    		this.outStream.writeObject(depositMessage);
+    		this.outStream.flush();
+    		
+    		Message serverMessage = (Message) inStream.readObject();
+    		
+    		return serverMessage.getText();
+    		
+    	} catch (IOException | ClassNotFoundException except) {
+    		except.printStackTrace();
+    	}
+    	return "Deposited";
+    }
+    
+    public String sendWithdrawalMessage(String username, int balance) {
+    	Message withdrawMessage = new Message(MessageType.WITHDRAWAL, username, null, balance, "Withdraw", "Client", null, -1);
+    	
+    	try {
+    		this.outStream.writeObject(withdrawMessage);
+    		this.outStream.flush();
+    		
+    		Message serverMessage = (Message) inStream.readObject();
+    		
+    		return serverMessage.getText();
+    		
+    	} catch (IOException | ClassNotFoundException except) {
+    		except.printStackTrace();
+    	}
+    	return "Withdrew";
+    }
+    
+    
+    
     public int getTableCountMessage() {
-    	Message tableCountMessage = new Message(MessageType.TABLE_COUNT, null, null, null, null, null);
+    	Message tableCountMessage = new Message(MessageType.TABLE_COUNT, null, null, 0, null, "Client", null, -1);
     	
     	try {
     		this.outStream.writeObject(tableCountMessage);

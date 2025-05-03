@@ -12,8 +12,10 @@ public class Message implements Serializable {
 	private final String password;
 	private final Date date;
 	private final Card card;
+	private final int balance;
+	private final int tableID;
 	
-	public Message(MessageType type, String username, String password, String text, String from, Card card) {
+	public Message(MessageType type, String username, String password, int balance, String text, String from, Card card, int tableID) {
 		this.id = ++Message.idCount;
 		this.type = type;
 		this.username = username;
@@ -22,10 +24,20 @@ public class Message implements Serializable {
 		this.from = from;
 		this.date = new Date();
 		this.card = card;
+		this.balance = balance;
+		this.tableID = tableID;
 	}
 	
 	public int getID() {
 		return this.id;
+	}
+	
+	public int getBalance() {
+	    return this.balance;
+	}
+
+	public int getTableID() {
+	    return this.tableID;
 	}
 	
 	public String getUsername() {

@@ -55,9 +55,17 @@ public class Server {
 
 	private static class ClientHandler implements Runnable {
 		private final Socket clientSocket;
+		private ObjectOutputStream outStream;
+		private ObjectInputStream inStream;
 		
 		public ClientHandler(Socket socket) {
 			this.clientSocket = socket;
+			try {
+		        this.outStream = new ObjectOutputStream(socket.getOutputStream());
+		        this.inStream = new ObjectInputStream(socket.getInputStream());
+		    } catch (IOException e) {
+		        e.printStackTrace();
+		    }
 		}
 
 		@Override
@@ -71,119 +79,8 @@ public class Server {
 				
 				while (true) {
 					Message incomingMessage = (Message) inStream.readObject();
+					handleMessage(incomingMessage);
 					
-					switch (incomingMessage.getType()) {
-						
-						case LOGIN:
-							String username = incomingMessage.getUsername();
-							String password = incomingMessage.getPassword();
-							
-							boolean authenticated = false;
-							
-							// Reads from "database" by line separated into parts
-							try (BufferedReader reader = new BufferedReader(new FileReader("src\\players.txt"))) {
-								
-								String line;
-								
-								while ((line = reader.readLine()) != null) {
-									String[] parts = line.split(",");
-									if (parts.length == 3 && parts[0].equals(username) && parts[1].equals(password)) {
-										int balance = Integer.parseInt(parts[2]);
-										
-										// Get Logged in Player list, if username isn't logged in create a new player
-										if (getLoggedInPlayer(username) == null) {
-											Player newPlayer = new Player(username, password, balance);
-											Server.loggedInPlayers.add(newPlayer);
-											
-											Message success = new Message(MessageType.LOGIN, username, password, "Login successful.", null, null);
-						                    outStream.writeObject(success);
-						                    
-						                 // Set to true because login matched
-											authenticated = true;
-											break;
-										} else {
-											// Reject logins because username isn't null
-											Message alreadyLoggedIn = new Message(MessageType.LOGIN, username, password, "Already logged in.", null, null);
-											outStream.writeObject(alreadyLoggedIn);
-											
-										}
-										
-										//break;
-									}
-								}
-								
-						    } catch (IOException e) {
-						        e.printStackTrace();
-						    }
-
-							if (!authenticated) {
-								try (BufferedReader reader = new BufferedReader(new FileReader("src\\dealers.txt"))) {
-									String line;
-									
-									while ((line = reader.readLine()) != null ) {
-										String[] parts = line.split(",");
-										if (parts.length >= 2 && parts[0].equals(username) && parts[1].equals(password)) {
-											
-											if (getLoggedInDealer(username) == null) {
-												Dealer newDealer = new Dealer(username, password);
-												Server.loggedInDealers.add(newDealer);
-												
-												Message success = new Message(MessageType.LOGIN, username, password, "Dealer login successful.", null, null);
-												outStream.writeObject(success);
-												
-											} else {
-												Message alreadyLoggedIn = new Message(MessageType.LOGIN, username, password, "Dealer already logged in.", null, null);
-												outStream.writeObject(alreadyLoggedIn);
-											}
-											
-											authenticated = true;
-											break;
-										}
-									}
-								} catch (IOException e) {
-									e.printStackTrace();
-								}
-							}
-							
-							if (!authenticated) {
-								Message fail = new Message(MessageType.LOGIN, username, password, "Invalid username or password.", null, null);
-								outStream.writeObject(fail);
-							}
-							
-							
-							break;
-						case LOGOUT:
-							Message logoutMessage = new Message(MessageType.LOGOUT, null, null, "You've been logged out", null, null);
-							
-							outStream.writeObject(logoutMessage);
-							
-							return;
-						case JOIN_TABLE:
-							
-							break;
-						case LEAVE_TABLE:
-							
-							break;
-						case HIT:
-							
-							break;
-						case STAY:
-							
-							break;
-						case WITHDRAWAL:
-							
-							break;
-						case DEPOSIT:
-							
-							break;
-						case TABLE_COUNT:
-							Message outMessage = new Message(MessageType.TABLE_COUNT, null, null, String.valueOf(tables.size()), null, null);
-							
-							outStream.writeObject(outMessage);
-							
-							break;
-							
-					}
 				}
 			} catch (EOFException e) {
 				System.out.println("A Client has disconnected");
@@ -206,6 +103,127 @@ public class Server {
 				} catch (IOException except) {
 					except.printStackTrace();
 				}
+			}
+		}
+		
+		public void handleMessage(Message incomingMessage) {
+			try {
+				
+				switch (incomingMessage.getType()) {
+				
+				case LOGIN:
+					String username = incomingMessage.getUsername();
+					String password = incomingMessage.getPassword();
+					
+					boolean authenticated = false;
+					
+					// Reads from "database" by line separated into parts
+					try (BufferedReader reader = new BufferedReader(new FileReader("src\\players.txt"))) {
+						
+						String line;
+						
+						while ((line = reader.readLine()) != null) {
+							String[] parts = line.split(",");
+							if (parts.length == 3 && parts[0].equals(username) && parts[1].equals(password)) {
+								int balance = Integer.parseInt(parts[2]);
+								
+								// Get Logged in Player list, if username isn't logged in create a new player
+								if (getLoggedInPlayer(username) == null) {
+									Player newPlayer = new Player(username, password, balance);
+									Server.loggedInPlayers.add(newPlayer);
+									
+									Message success = new Message(MessageType.LOGIN, username, password, balance, "Login successful.", null, null, -1 );
+				                    outStream.writeObject(success);
+				                    
+				                 // Set to true because login matched
+									authenticated = true;
+									break;
+								} else {
+									// Reject logins because username isn't null
+									Message alreadyLoggedIn = new Message(MessageType.LOGIN, username, password, balance, "Already logged in.", null, null, -1);
+									outStream.writeObject(alreadyLoggedIn);
+									
+								}
+								
+								//break;
+							}
+						}
+						
+				    } catch (IOException e) {
+				        e.printStackTrace();
+				    }
+
+					if (!authenticated) {
+						try (BufferedReader reader = new BufferedReader(new FileReader("src\\dealers.txt"))) {
+							String line;
+							
+							while ((line = reader.readLine()) != null ) {
+								String[] parts = line.split(",");
+								if (parts.length >= 2 && parts[0].equals(username) && parts[1].equals(password)) {
+									
+									if (getLoggedInDealer(username) == null) {
+										Dealer newDealer = new Dealer(username, password);
+										Server.loggedInDealers.add(newDealer);
+										
+										Message success = new Message(MessageType.LOGIN, username, password, 0, "Dealer login successful.", null, null, -1);
+										outStream.writeObject(success);
+										
+									} else {
+										Message alreadyLoggedIn = new Message(MessageType.LOGIN, username, password, 0, "Dealer already logged in.", null, null, -1);
+										outStream.writeObject(alreadyLoggedIn);
+									}
+									
+									authenticated = true;
+									break;
+								}
+							}
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+					
+					if (!authenticated) {
+						Message fail = new Message(MessageType.LOGIN, username, password, 0, "Invalid username or password.", null, null, -1);
+						outStream.writeObject(fail);
+					}
+					
+					
+					break;
+				case LOGOUT:
+					Message logoutMessage = new Message(MessageType.LOGOUT, null, null, 0, "You've been logged out", null, null, -1);
+					
+					outStream.writeObject(logoutMessage);
+					
+					return;
+				case JOIN_TABLE:
+					
+					break;
+				case LEAVE_TABLE:
+					
+					break;
+				case HIT:
+					
+					break;
+				case STAY:
+					
+					break;
+				case WITHDRAWAL:
+					
+					break;
+				case DEPOSIT:
+					
+					break;
+				case TABLE_COUNT:
+					Message outMessage = new Message(MessageType.TABLE_COUNT, null, null, 0, String.valueOf(tables.size()), null, null, -1);
+					
+					outStream.writeObject(outMessage);
+					
+					break;
+					
+			}
+				
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
 		
