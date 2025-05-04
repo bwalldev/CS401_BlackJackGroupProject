@@ -110,82 +110,7 @@ public class Server {
 				switch (incomingMessage.getType()) {
 				
 				case LOGIN:
-					String username = incomingMessage.getUsername();
-					String password = incomingMessage.getPassword();
-					
-					boolean authenticated = false;
-					
-					// Reads from "database" by line separated into parts
-					try (BufferedReader reader = new BufferedReader(new FileReader("src\\players.txt"))) {
-						
-						String line;
-						
-						while ((line = reader.readLine()) != null) {
-							String[] parts = line.split(",");
-							if (parts.length == 3 && parts[0].equals(username) && parts[1].equals(password)) {
-								int balance = Integer.parseInt(parts[2]);
-								
-								// Get Logged in Player list, if username isn't logged in create a new player
-								if (getLoggedInPlayer(username) == null) {
-									Player newPlayer = new Player(username, password, balance);
-									Server.loggedInPlayers.add(newPlayer);
-									
-									Message success = new Message(MessageType.LOGIN, username, password, balance, "Login successful.", null, null, -1 );
-				                    this.outStream.writeObject(success);
-				                    
-				                 // Set to true because login matched
-									authenticated = true;
-									break;
-								} else {
-									// Reject logins because username isn't null
-									Message alreadyLoggedIn = new Message(MessageType.LOGIN, username, password, balance, "Already logged in.", null, null, -1);
-									this.outStream.writeObject(alreadyLoggedIn);
-									
-								}
-								
-								//break;
-							}
-						}
-						
-				    } catch (IOException e) {
-				        e.printStackTrace();
-				    }
-
-					if (!authenticated) {
-						try (BufferedReader reader = new BufferedReader(new FileReader("src\\dealers.txt"))) {
-							String line;
-							
-							while ((line = reader.readLine()) != null ) {
-								String[] parts = line.split(",");
-								if (parts.length >= 2 && parts[0].equals(username) && parts[1].equals(password)) {
-									
-									if (getLoggedInDealer(username) == null) {
-										Dealer newDealer = new Dealer(username, password);
-										Server.loggedInDealers.add(newDealer);
-										
-										Message success = new Message(MessageType.LOGIN, username, password, 0, "Dealer login successful.", null, null, -1);
-										this.outStream.writeObject(success);
-										
-									} else {
-										Message alreadyLoggedIn = new Message(MessageType.LOGIN, username, password, 0, "Dealer already logged in.", null, null, -1);
-										this.outStream.writeObject(alreadyLoggedIn);
-									}
-									
-									authenticated = true;
-									break;
-								}
-							}
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					}
-					
-					if (!authenticated) {
-						Message fail = new Message(MessageType.LOGIN, username, password, 0, "Invalid username or password.", null, null, -1);
-						this.outStream.writeObject(fail);
-					}
-					
-					
+					handleLogin(incomingMessage);
 					break;
 				case LOGOUT:
 					Message logoutMessage = new Message(MessageType.LOGOUT, null, null, 0, "You've been logged out", null, null, -1);
@@ -245,5 +170,82 @@ public class Server {
 			}
 			return null;
 		}
+		
+		private void handleLogin(Message incomingMessage) throws IOException {
+			String username = incomingMessage.getUsername();
+			String password = incomingMessage.getPassword();		
+			boolean authenticated = false;
+			
+			// Reads from "database" by line separated into parts
+			try (BufferedReader reader = new BufferedReader(new FileReader("src\\players.txt"))) {
+				
+				String line;
+				
+				while ((line = reader.readLine()) != null) {
+					String[] parts = line.split(",");
+					if (parts.length == 3 && parts[0].equals(username) && parts[1].equals(password)) {
+						int balance = Integer.parseInt(parts[2]);
+						
+						// Get Logged in Player list, if username isn't logged in create a new player
+						if (getLoggedInPlayer(username) == null) {
+							Player newPlayer = new Player(username, password, balance);
+							Server.loggedInPlayers.add(newPlayer);
+							
+							Message success = new Message(MessageType.LOGIN, username, password, balance, "Login successful.", null, null, -1 );
+		                    this.outStream.writeObject(success);
+		                    
+		                 // Set to true because login matched
+							authenticated = true;
+							break;
+						} else {
+							// Reject logins because username isn't null
+							Message alreadyLoggedIn = new Message(MessageType.LOGIN, username, password, balance, "Already logged in.", null, null, -1);
+							this.outStream.writeObject(alreadyLoggedIn);
+							
+						}
+						
+						//break;
+					}
+				}
+				
+		    } catch (IOException e) {
+		        e.printStackTrace();
+		    }
+
+			if (!authenticated) {
+				try (BufferedReader reader = new BufferedReader(new FileReader("src\\dealers.txt"))) {
+					String line;
+					
+					while ((line = reader.readLine()) != null ) {
+						String[] parts = line.split(",");
+						if (parts.length >= 2 && parts[0].equals(username) && parts[1].equals(password)) {
+							
+							if (getLoggedInDealer(username) == null) {
+								Dealer newDealer = new Dealer(username, password);
+								Server.loggedInDealers.add(newDealer);
+								
+								Message success = new Message(MessageType.LOGIN, username, password, 0, "Dealer login successful.", null, null, -1);
+								this.outStream.writeObject(success);
+								
+							} else {
+								Message alreadyLoggedIn = new Message(MessageType.LOGIN, username, password, 0, "Dealer already logged in.", null, null, -1);
+								this.outStream.writeObject(alreadyLoggedIn);
+							}
+							
+							authenticated = true;
+							break;
+						}
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			if (!authenticated) {
+				Message fail = new Message(MessageType.LOGIN, username, password, 0, "Invalid username or password.", null, null, -1);
+				this.outStream.writeObject(fail);
+			}
+		}
 	}
+	
 }

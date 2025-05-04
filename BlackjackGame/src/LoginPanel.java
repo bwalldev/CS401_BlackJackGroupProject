@@ -48,27 +48,8 @@ public class LoginPanel extends JPanel {
 			else {
 				String username = usernameField.getText();
 				String password = new String(passwordField.getPassword());
-				
-				String loginStatus = gui.getClient().sendLoginMessage(username, password);
-				
-				JOptionPane.showMessageDialog(null, loginStatus, "Login", JOptionPane.INFORMATION_MESSAGE);
-				
-				if (loginStatus.equals("Login successful.")) {
-					gui.setPlayer(username, password, 0);
-					
-					gui.getMainPanel().remove(gui.getMainPanel().getComponent(1));
-					gui.getMainPanel().add(new LobbyPanel(gui), "lobby");
-					
-					gui.getCardLayout().show(gui.getMainPanel(), "lobby");
-				}
-				else if (loginStatus.equals("Dealer login successful.")) {
-					gui.setDealer(username, password);
-					
-					gui.getMainPanel().remove(gui.getMainPanel().getComponent(1));
-					gui.getMainPanel().add(new LobbyPanel(gui),  "lobby");
-					
-					gui.getCardLayout().show(gui.getMainPanel(), "lobby");
-				}
+				gui.getClient().startListening();
+				gui.getClient().sendLoginMessage(username, password);
 			}
 		});
 		
