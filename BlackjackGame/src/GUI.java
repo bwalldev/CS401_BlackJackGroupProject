@@ -23,6 +23,8 @@ public class GUI extends JFrame {
 		
 		mainPanel.add(new LoginPanel(this), "login");
 		mainPanel.add(new LobbyPanel(this), "lobby");
+		mainPanel.add(new TablePanel(this), "table");
+
 		
 		this.add(mainPanel);
 		this.setVisible(true);
