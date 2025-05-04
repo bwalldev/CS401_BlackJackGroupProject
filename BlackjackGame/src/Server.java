@@ -57,6 +57,7 @@ public class Server {
 		private final Socket clientSocket;
 		private ObjectOutputStream outStream;
 		private ObjectInputStream inStream;
+		private String username = null;
 		
 		public ClientHandler(Socket socket) {
 			this.clientSocket = socket;
@@ -82,6 +83,20 @@ public class Server {
 				System.out.println("A Client has disconnected");
 			} catch (SocketException e) {
 				System.out.println("A Client has closed the program without disconnecting.");
+				
+				if (this.username != null) {
+					Player player = getLoggedInPlayer(this.username);
+					if (player != null) {
+						Server.loggedInPlayers.remove(player);
+						System.out.println("Logged Out Player: " + this.username);
+					}
+					
+					Dealer dealer = getLoggedInDealer(this.username);
+					if (dealer != null) {
+						Server.loggedInDealers.remove(dealer);
+						System.out.println("Logged Out Ddealer: " + this.username);
+					}
+				}
 				// try to add logout here
 			} catch (IOException | ClassNotFoundException except) {
 				except.printStackTrace();
@@ -113,10 +128,7 @@ public class Server {
 					handleLogin(incomingMessage);
 					break;
 				case LOGOUT:
-					Message logoutMessage = new Message(MessageType.LOGOUT, null, null, 0, "You've been logged out", null, null, -1);
-					
-					this.outStream.writeObject(logoutMessage);
-					
+					handleLogout(incomingMessage);
 					return;
 				case JOIN_TABLE:
 					
@@ -172,7 +184,7 @@ public class Server {
 		}
 		
 		private void handleLogin(Message incomingMessage) throws IOException {
-			String username = incomingMessage.getUsername();
+			this.username = incomingMessage.getUsername();
 			String password = incomingMessage.getPassword();		
 			boolean authenticated = false;
 			
@@ -245,6 +257,26 @@ public class Server {
 				Message fail = new Message(MessageType.LOGIN, username, password, 0, "Invalid username or password.", null, null, -1);
 				this.outStream.writeObject(fail);
 			}
+		}
+		
+		private void handleLogout(Message incomingMessage) throws IOException {
+			String username = incomingMessage.getUsername();
+			
+			Player player = getLoggedInPlayer(username);
+			if (player != null) {
+				Server.loggedInPlayers.remove(player);
+				System.out.println("Player " + username + " has logged out.");
+			}
+			
+			Dealer dealer = getLoggedInDealer(username);
+			if (dealer != null) {
+				Server.loggedInDealers.remove(dealer);
+				System.out.println("Dealer " + username + " has logged out.");
+			}
+			
+			Message logoutMessage = new Message(MessageType.LOGOUT, null, null, 0, "You've been logged out", null, null, -1);
+			
+			this.outStream.writeObject(logoutMessage);
 		}
 	}
 	
