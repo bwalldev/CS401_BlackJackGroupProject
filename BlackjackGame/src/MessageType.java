@@ -11,5 +11,6 @@ public enum MessageType {
 	ERROR,
 	WIN,
 	LOSE,
-	BUSTED
+	BUSTED,
+	TABLE_COUNT
 }

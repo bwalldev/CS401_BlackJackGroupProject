@@ -27,8 +27,9 @@ public class Game {
 	        timer.cancel(); //stop timer if there is no time left
 	        System.out.println("Timer has stopped");
 	    }
-		
+	    timer = new Timer();
 	    TimerTask turnTimeoutTask = new TimerTask() {
+		
 		public void run() {
 		    try {
 		    	//skip turn if the timer runs out
@@ -39,7 +40,7 @@ public class Game {
 		    	} catch (Exception e) { 
 		    		System.out.println("Timer method failed" + e);
 		    	}
-			}
+		}
 	    };
 	    
 	    	timer.schedule(turnTimeoutTask, 30 * 1000); //30 seconds
@@ -55,15 +56,17 @@ public class Game {
     }
 
     public void nextPlayerTurn() {
-	++currentPlayer;
+	currentPlayer++;
 	if (currentPlayer >= players.size()) {
-		dealerTurn();
+	    if (timer != null) timer.cancel();
+	    dealerTurn();
 	} else {
 	    Player player = players.get(currentPlayer);
 	    if (player.getHand().isBusted() || player.hasStayed()) { //has stayed is in player class no need to use getHand() made this mistake too many times
-		    nextPlayerTurn();
+		nextPlayerTurn();
 	    } else {
 		System.out.println("It's now " + player.getUsername() + "'s turn.");
+		startTurnTimer();
 	    }
 	}
     }
@@ -123,8 +126,10 @@ public class Game {
 	    if(player.getHand().isBusted()) {
 	    	System.out.println(player.getUsername() + " busted!");
 		nextPlayerTurn();
+	    } else {
+		startTurnTimer(); //reset timer
 	    }
-    }
+	}
 
     public void stay() {
 	if (timer != null) {

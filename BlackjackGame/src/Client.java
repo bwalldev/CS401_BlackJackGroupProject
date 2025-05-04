@@ -6,133 +6,249 @@ import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import javax.swing.JOptionPane;
+
 public class Client {
-    private Socket socket;                  
-    private BufferedReader input;          
-    private PrintWriter output;
-    private ObjectInputStream inStream;
-    private ObjectOutputStream outStream;
+    private Socket socket;
+    private GUI gui;
+    ObjectInputStream inStream;
+	ObjectOutputStream outStream;
+	boolean loggedIn;
     
-    public Client(String host, int port) throws IOException {
-        socket = new Socket(host, port);
-        outStream = new ObjectOutputStream(socket.getOutputStream());
-        inStream = new ObjectInputStream(socket.getInputStream());
-    }
-    
-    public static void main(String[] args) {
-    	ObjectInputStream inStream = null;
-    	ObjectOutputStream outStream = null;
-    	
-    	Socket socket = null;
-    	
-    	try {
-    		socket = new Socket("localhost", 7777);
-    		
-    		outStream = new ObjectOutputStream(socket.getOutputStream());
-    		inStream = new ObjectInputStream(socket.getInputStream());
-    	} catch (IOException except) {
-    		except.printStackTrace();
-    	}
-    	
-    	
-	    	Message testMessage = new Message(MessageType.LOGIN, "bob", "ross", "TEXT", "Client", null);
-	    	
-	    	try {
-				outStream.writeObject(testMessage);
-				outStream.flush();
-				
-				Message response1 = (Message) inStream.readObject();
-				System.out.println("Response 1: " + response1.getText());
-			} catch (IOException | ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-	    	
-	    	Message testMessageFail = new Message(MessageType.LOGIN, "test", "fail", "TEXT", "Client", null);
-	    	
-	    	try {
-				outStream.writeObject(testMessageFail);
-				outStream.flush();
-				
-				Message response2 = (Message) inStream.readObject();
-				System.out.println("Response 2: " + response2.getText());
-			} catch (IOException | ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-	    	
-	    	
-	    	Message testDealerLogin = new Message(MessageType.LOGIN, "dealer1", "pass1", "TEXT", "Client", null);
-	    	
-	    	try {
-	    		outStream.writeObject(testDealerLogin);
-	    		outStream.flush();
-	    		
-	    		Message response3 = (Message) inStream.readObject();
-	    		System.out.println("Response 3: " + response3.getText());
-	    	} catch (IOException | ClassNotFoundException e) {
-	    		e.printStackTrace();
-	    	}
-	    	
-//	    	Message serverMessage = null;
-	    	
-//	    	try {
-//				serverMessage = (Message) inStream.readObject();
-//			} catch (ClassNotFoundException | IOException e) {
-//				e.printStackTrace();
-//			}
-//	    	
-//	    	System.out.println(serverMessage.getText());
-    	
+    public Client(GUI gui) throws IOException {
+    	this.gui = gui;
+    	this.inStream = null;
+    	this.outStream = null;
+    	this.socket = null;
+    	this.loggedIn = false;
     }
 
     //connect the client to the server on localhost
-    public void connectToServer(int port) {
+    public boolean connectToServer(String ipAddress, int port) {
        try {
-    	   socket= new Socket ("localhost", port);
-    	   input = new BufferedReader (new InputStreamReader(socket.getInputStream()));
-    	   output = new PrintWriter(socket.getOutputStream(), true);
+    	   this.socket= new Socket (ipAddress, port);
+    	   
+    	   this.outStream = new ObjectOutputStream(this.socket.getOutputStream());
+    	   this.inStream = new ObjectInputStream (this.socket.getInputStream());
+    	   
+    	   return true;
        } catch (IOException e) {
     	   System.out.println("connection faild! " +  e.getMessage());
+    	   
+    	   return false;
        }
     }
 
    // send message to server
-    public void send(String message) {
-    	if (output!= null)
-    		output.println(message);  
+    public void sendLoginMessage(String username, String password) {
+    	  Message loginMessage = new Message(MessageType.LOGIN, username, password, 0, "login", "Client", null, -1);
+    	  
+    	  try {
+			this.outStream.writeObject(loginMessage);
+			this.outStream.flush();
+			
+		  } catch (IOException except) {
+			except.printStackTrace();
+		  }
+    	  
+    	
     }
     
-    public Message sendMessage(Message message) throws IOException, ClassNotFoundException {
-    	outStream.writeObject(message);
-    	outStream.flush();
-    	return (Message) inStream.readObject();
-    }
+    public void sendLogoutMessage(String username, String password) {
+  	  Message logoutMessage = new Message(MessageType.LOGOUT, username, password, 0, "logout", "Client", null, -1);
+  	  
+  	  try {
+			this.outStream.writeObject(logoutMessage);
+			this.outStream.flush();
+			
+		  } catch (IOException  except) {
+			except.printStackTrace();
+		  }
+  	  
+  }
     
-   // receives message from server
-    public String receive(){
+    public void sendHitMessage(String username, Card card) {
+    	Message hitMessage = new Message(MessageType.HIT, username, null, 0, "Hit", "Client", card, -1);
+    	
     	try {
-    		if (input != null) {
-    			return input.readLine();
-    		}
-    		else {
-    			return null;
-    		}
-    	} catch (IOException e) {
-    		System.out.println("receiving faild! " + e.getMessage());
-    		return null;
+    		this.outStream.writeObject(hitMessage);
+    		this.outStream.flush();
     		
-    	}  
+    	} catch (IOException except) {
+    		except.printStackTrace();
+    	}
+    	
+ 
+    }
+    
+    public void sendStayMessage(String username) {
+    	
+    	Message stayMessage = new Message(MessageType.STAY, username, null, 0, "Stay", "Client", null, -1);
+	
+    	try {
+    		this.outStream.writeObject(stayMessage);
+    		this.outStream.flush();
+		
+    	} catch (IOException  except) {
+    		except.printStackTrace();
+    	}
+	
+    }
+    
+    public void sendJoinTableMessage(String username, int tableID) {
+    	Message joinMessage = new Message(MessageType.JOIN_TABLE, username, null, 0, "Join Table", "Client", null, tableID);
+    	
+    	try {
+    		this.outStream.writeObject(joinMessage);
+    		this.outStream.flush();	
+    		
+    	} catch (IOException  except) {
+    		except.printStackTrace();
+    	}
+    
+    }
+    
+    public void sendLeaveTableMessage(String username, int tableID) {
+    	Message leaveMessage = new Message(MessageType.LEAVE_TABLE, username, null, 0, "Leave Table", "Client", null, tableID);
+    	
+    	try {
+    		this.outStream.writeObject(leaveMessage);
+    		this.outStream.flush();
+    		
+    	} catch (IOException except) {
+    		except.printStackTrace();
+    	}
+    
+    }
+    
+    public void sendDepositMessage(String username, int balance) {
+    	Message depositMessage = new Message(MessageType.DEPOSIT, username, null, balance, "Deposit", "Client", null, -1);
+    	
+    	try {
+    		this.outStream.writeObject(depositMessage);
+    		this.outStream.flush();
+    		
+    	} catch (IOException except) {
+    		except.printStackTrace();
+    	}
+    	
+    }
+    
+    public void sendWithdrawalMessage(String username, int balance) {
+    	Message withdrawMessage = new Message(MessageType.WITHDRAWAL, username, null, balance, "Withdraw", "Client", null, -1);
+    	
+    	try {
+    		this.outStream.writeObject(withdrawMessage);
+    		this.outStream.flush();
+    		
+   
+    	} catch (IOException except) {
+    		except.printStackTrace();
+    	}
+  
+    }
+    
+    
+    
+    public int getTableCountMessage() {
+    	Message tableCountMessage = new Message(MessageType.TABLE_COUNT, null, null, 0, null, "Client", null, -1);
+    	
+    	try {
+    		this.outStream.writeObject(tableCountMessage);
+    		
+    		Message serverMessage = (Message) inStream.readObject();
+    		
+    		return Integer.parseInt(serverMessage.getText());
+    	} catch(IOException | ClassNotFoundException except) {
+    		except.printStackTrace();
+    	}
+    	
+    	return 0;
+    }
+    
+    public boolean getLoggedIn() {
+    	return this.loggedIn;
     }
 
     //disconnects from server
     public void disconnect() {
     	try {
-    		 if (input != null) input.close();
-             if (output != null) output.close();
+    		 if (this.inStream != null) 
+    			 this.inStream.close();
+             if (this.outStream != null) 
+            	 this.outStream.close();
              System.out.println("Disconnected! ");
     	}
     	catch(IOException e) {
             System.out.println("Error Disconnecting! " + e.getMessage());
     	}	
        
+    }
+    
+    
+    public void startListening() {
+    	Thread listenerThread = new Thread(new Runnable() {
+    		public void run() {
+    			try {
+    				while(true) {
+    					Message msg = (Message) inStream.readObject();
+    					handleServerMessage(msg);
+    				}
+    			} catch (IOException | ClassNotFoundException e) {
+    				System.out.println("Disconnected from Server");
+    			}
+    		}
+    	});
+    	listenerThread.start();
+    }
+    
+    private void handleServerMessage(Message msg) {
+    	
+    	switch (msg.getType()) {
+    	case LOGIN:
+    		
+    		String loginStatus = msg.getText();
+    		
+    		if (loginStatus.equals("Login successful.")) {
+    			this.loggedIn = true;
+				gui.setPlayer(msg.getUsername(), msg.getPassword(), msg.getBalance());
+				gui.showLobby();
+			}
+			else if (loginStatus.equals("Dealer login successful.")) {
+				this.loggedIn = true;
+				gui.setDealer(msg.getUsername(), msg.getPassword());
+				gui.showLobby();
+			} else {
+				JOptionPane.showMessageDialog(null, loginStatus, "Login Unsuccessful", JOptionPane.ERROR_MESSAGE);
+			}
+    		
+    		break;
+    	case LOGOUT:
+    		this.loggedIn = false;
+    		
+    		JOptionPane.showMessageDialog(null, "You have been logged.", "Logout", JOptionPane.INFORMATION_MESSAGE);
+    		
+    		gui.setPlayer("", "", 0);
+    		
+    		gui.getCardLayout().show(gui.getMainPanel(), "login");
+    		break;
+    	case JOIN_TABLE:
+    		break;
+    	case LEAVE_TABLE:
+    		break;
+    	case HIT:
+    		break;
+    	case STAY:
+    		break;
+    	case WITHDRAWAL:
+    		break;
+    	case DEPOSIT:
+    		break;
+    	case TABLE_COUNT:
+    		break;
+		default:
+			break;
+    	}
+    	
     }
 }
