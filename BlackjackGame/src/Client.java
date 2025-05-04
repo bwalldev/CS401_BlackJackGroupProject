@@ -224,6 +224,13 @@ public class Client {
     		
     		break;
     	case LOGOUT:
+    		this.loggedIn = false;
+    		
+    		JOptionPane.showMessageDialog(null, "You have been logged.", "Logout", JOptionPane.INFORMATION_MESSAGE);
+    		
+    		gui.setPlayer("", "", 0);
+    		
+    		gui.getCardLayout().show(gui.getMainPanel(), "login");
     		break;
     	case JOIN_TABLE:
     		break;
