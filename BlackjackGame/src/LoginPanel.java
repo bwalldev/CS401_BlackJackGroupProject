@@ -55,6 +55,7 @@ public class LoginPanel extends JPanel {
 		
 		this.add(title);
 		this.add(subtitle);
+		this.add(Box.createRigidArea(new Dimension(0,100)));
 		this.add(usernameLabel);
 		this.add(usernameField);
 		this.add(passwordLabel);
