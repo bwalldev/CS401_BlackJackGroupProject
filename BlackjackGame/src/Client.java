@@ -235,6 +235,9 @@ public class Client {
     		gui.getCardLayout().show(gui.getMainPanel(), "login");
     		break;
     	case JOIN_TABLE:
+    		gui.setTableID(msg.getTableID());
+    		
+    		gui.getCardLayout().show(gui.getMainPanel(), "table");
     		break;
     	case LEAVE_TABLE:
     		break;

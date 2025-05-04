@@ -1,5 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
+
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class TablePanel extends JPanel {
@@ -7,6 +9,6 @@ public class TablePanel extends JPanel {
         this.setBackground(Color.GREEN);
         this.setLayout(new BorderLayout());
 
-       
+       JLabel title = new JLabel("Table ID: ");
     }
 }

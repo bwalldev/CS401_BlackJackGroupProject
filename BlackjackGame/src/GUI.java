@@ -9,8 +9,10 @@ public class GUI extends JFrame {
 	private JPanel mainPanel;
 	private Client client;
 	private Player player;
+	private int tableID;
 	
 	public GUI() throws IOException {
+		this.tableID = -1;
 		this.player = new Player("Player 1", "", 0);
 		this.client = new Client(this);
 		this.setTitle("G2 BlackJack");
@@ -32,6 +34,14 @@ public class GUI extends JFrame {
 	
 	public void setClient(Client client) {
 		this.client = client;
+	}
+	
+	public void setTableID(int id) {
+		this.tableID = id;
+	}
+	
+	public int getTableID() {
+		return this.tableID;
 	}
 	
 	public Client getClient() {

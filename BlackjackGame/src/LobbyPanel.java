@@ -76,5 +76,10 @@ public class LobbyPanel extends JPanel {
 		    String password = gui.getPlayer().getPassword();
 		    gui.getClient().sendLogoutMessage(username, password);
 		});
+		
+		lobbyButton1.addActionListener(e -> {
+			gui.getClient().sendJoinTableMessage(gui.getPlayer().getUsername(), 0);
+			
+		});
 	}
 }
