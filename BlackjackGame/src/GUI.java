@@ -12,7 +12,7 @@ public class GUI extends JFrame {
 	
 	public GUI() throws IOException {
 		this.player = new Player("Player 1", "", 0);
-		this.client = new Client();
+		this.client = new Client(this);
 		this.setTitle("G2 BlackJack");
 		this.setSize(800, 500);
 		this.setLocationRelativeTo(null);
@@ -54,6 +54,12 @@ public class GUI extends JFrame {
 	
 	public JPanel getMainPanel() {
 		return this.mainPanel;
+	}
+	
+	public void showLobby() {
+		mainPanel.remove(mainPanel.getComponent(1));
+		mainPanel.add(new LobbyPanel(this), "lobby");
+		cardLayout.show(mainPanel, "lobby");
 	}
 	
 	public static void main(String[] args) throws IOException {

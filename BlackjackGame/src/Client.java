@@ -6,13 +6,17 @@ import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import javax.swing.JOptionPane;
+
 public class Client {
     private Socket socket;
+    private GUI gui;
     ObjectInputStream inStream;
 	ObjectOutputStream outStream;
 	boolean loggedIn;
     
-    public Client() throws IOException {
+    public Client(GUI gui) throws IOException {
+    	this.gui = gui;
     	this.inStream = null;
     	this.outStream = null;
     	this.socket = null;
@@ -36,62 +40,48 @@ public class Client {
     }
 
    // send message to server
-    public String sendLoginMessage(String username, String password) {
+    public void sendLoginMessage(String username, String password) {
     	  Message loginMessage = new Message(MessageType.LOGIN, username, password, 0, "login", "Client", null, -1);
     	  
     	  try {
 			this.outStream.writeObject(loginMessage);
 			this.outStream.flush();
 			
-			Message serverMessage = (Message) inStream.readObject();
-			
-			this.loggedIn = true;
-			
-			return serverMessage.getText();
-		  } catch (IOException | ClassNotFoundException except) {
+		  } catch (IOException except) {
 			except.printStackTrace();
 		  }
     	  
-    	  return "Login Unsuccessful";
+    	
     }
     
-    public String sendLogoutMessage(String username, String password) {
+    public void sendLogoutMessage(String username, String password) {
   	  Message logoutMessage = new Message(MessageType.LOGOUT, username, password, 0, "logout", "Client", null, -1);
   	  
   	  try {
 			this.outStream.writeObject(logoutMessage);
 			this.outStream.flush();
 			
-			Message serverMessage = (Message) inStream.readObject();
-			
-			this.loggedIn = true;
-			
-			return serverMessage.getText();
-		  } catch (IOException | ClassNotFoundException except) {
+		  } catch (IOException  except) {
 			except.printStackTrace();
 		  }
   	  
-  	  return "Logout Unsuccessful";
   }
     
-    public String sendHitMessage(String username, Card card) {
+    public void sendHitMessage(String username, Card card) {
     	Message hitMessage = new Message(MessageType.HIT, username, null, 0, "Hit", "Client", card, -1);
     	
     	try {
     		this.outStream.writeObject(hitMessage);
     		this.outStream.flush();
     		
-    		Message serverMessage = (Message) inStream.readObject();
-    		
-    		return serverMessage.getText();
-    	} catch (IOException | ClassNotFoundException except) {
+    	} catch (IOException except) {
     		except.printStackTrace();
     	}
     	
-    	return "Hit";
+ 
     }
     
-    public String sendStayMessage(String username) {
+    public void sendStayMessage(String username) {
     	
     	Message stayMessage = new Message(MessageType.STAY, username, null, 0, "Stay", "Client", null, -1);
 	
@@ -99,82 +89,63 @@ public class Client {
     		this.outStream.writeObject(stayMessage);
     		this.outStream.flush();
 		
-    		Message serverMessage = (Message) inStream.readObject();
-		
-    		return serverMessage.getText();
-    	} catch (IOException | ClassNotFoundException except) {
+    	} catch (IOException  except) {
     		except.printStackTrace();
     	}
 	
-    	return "Stay";
     }
     
-    public String sendJoinTableMessage(String username, int tableID) {
+    public void sendJoinTableMessage(String username, int tableID) {
     	Message joinMessage = new Message(MessageType.JOIN_TABLE, username, null, 0, "Join Table", "Client", null, tableID);
     	
     	try {
     		this.outStream.writeObject(joinMessage);
-    		this.outStream.flush();
+    		this.outStream.flush();	
     		
-    		Message serverMessage = (Message) inStream.readObject();
-    		
-    		return serverMessage.getText();
-    		
-    	} catch (IOException | ClassNotFoundException except) {
+    	} catch (IOException  except) {
     		except.printStackTrace();
     	}
-    	return "Joined Table";
+    
     }
     
-    public String sendLeaveTableMessage(String username, int tableID) {
+    public void sendLeaveTableMessage(String username, int tableID) {
     	Message leaveMessage = new Message(MessageType.LEAVE_TABLE, username, null, 0, "Leave Table", "Client", null, tableID);
     	
     	try {
     		this.outStream.writeObject(leaveMessage);
     		this.outStream.flush();
     		
-    		Message serverMessage = (Message) inStream.readObject();
-    		
-    		return serverMessage.getText();
-    		
-    	} catch (IOException | ClassNotFoundException except) {
+    	} catch (IOException except) {
     		except.printStackTrace();
     	}
-    	return "Left Table";
+    
     }
     
-    public String sendDepositMessage(String username, int balance) {
+    public void sendDepositMessage(String username, int balance) {
     	Message depositMessage = new Message(MessageType.DEPOSIT, username, null, balance, "Deposit", "Client", null, -1);
     	
     	try {
     		this.outStream.writeObject(depositMessage);
     		this.outStream.flush();
     		
-    		Message serverMessage = (Message) inStream.readObject();
-    		
-    		return serverMessage.getText();
-    		
-    	} catch (IOException | ClassNotFoundException except) {
+    	} catch (IOException except) {
     		except.printStackTrace();
     	}
-    	return "Deposited";
+    	
     }
     
-    public String sendWithdrawalMessage(String username, int balance) {
+    public void sendWithdrawalMessage(String username, int balance) {
     	Message withdrawMessage = new Message(MessageType.WITHDRAWAL, username, null, balance, "Withdraw", "Client", null, -1);
     	
     	try {
     		this.outStream.writeObject(withdrawMessage);
     		this.outStream.flush();
     		
-    		Message serverMessage = (Message) inStream.readObject();
-    		
-    		return serverMessage.getText();
-    		
-    	} catch (IOException | ClassNotFoundException except) {
+   
+    	} catch (IOException except) {
     		except.printStackTrace();
     	}
-    	return "Withdrew";
+  
     }
     
     
@@ -212,5 +183,72 @@ public class Client {
             System.out.println("Error Disconnecting! " + e.getMessage());
     	}	
        
+    }
+    
+    
+    public void startListening() {
+    	Thread listenerThread = new Thread(new Runnable() {
+    		public void run() {
+    			try {
+    				while(true) {
+    					Message msg = (Message) inStream.readObject();
+    					handleServerMessage(msg);
+    				}
+    			} catch (IOException | ClassNotFoundException e) {
+    				System.out.println("Disconnected from Server");
+    			}
+    		}
+    	});
+    	listenerThread.start();
+    }
+    
+    private void handleServerMessage(Message msg) {
+    	
+    	switch (msg.getType()) {
+    	case LOGIN:
+    		
+    		String loginStatus = msg.getText();
+    		
+    		if (loginStatus.equals("Login successful.")) {
+    			this.loggedIn = true;
+				gui.setPlayer(msg.getUsername(), msg.getPassword(), msg.getBalance());
+				gui.showLobby();
+			}
+			else if (loginStatus.equals("Dealer login successful.")) {
+				this.loggedIn = true;
+				gui.setDealer(msg.getUsername(), msg.getPassword());
+				gui.showLobby();
+			} else {
+				JOptionPane.showMessageDialog(null, loginStatus, "Login Unsuccessful", JOptionPane.ERROR_MESSAGE);
+			}
+    		
+    		break;
+    	case LOGOUT:
+    		this.loggedIn = false;
+    		
+    		JOptionPane.showMessageDialog(null, "You have been logged.", "Logout", JOptionPane.INFORMATION_MESSAGE);
+    		
+    		gui.setPlayer("", "", 0);
+    		
+    		gui.getCardLayout().show(gui.getMainPanel(), "login");
+    		break;
+    	case JOIN_TABLE:
+    		break;
+    	case LEAVE_TABLE:
+    		break;
+    	case HIT:
+    		break;
+    	case STAY:
+    		break;
+    	case WITHDRAWAL:
+    		break;
+    	case DEPOSIT:
+    		break;
+    	case TABLE_COUNT:
+    		break;
+		default:
+			break;
+    	}
+    	
     }
 }
