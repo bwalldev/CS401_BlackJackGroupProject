@@ -219,7 +219,7 @@ public class Client {
 				gui.setDealer(msg.getUsername(), msg.getPassword());
 				gui.showLobby();
 			} else {
-				JOptionPane.showMessageDialog(null, "Connection Failed", "Login Unsuccessful", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, loginStatus, "Login Unsuccessful", JOptionPane.ERROR_MESSAGE);
 			}
     		
     		break;

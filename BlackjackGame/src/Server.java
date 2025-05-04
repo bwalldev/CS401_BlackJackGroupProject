@@ -94,7 +94,7 @@ public class Server {
 					Dealer dealer = getLoggedInDealer(this.username);
 					if (dealer != null) {
 						Server.loggedInDealers.remove(dealer);
-						System.out.println("Logged Out Ddealer: " + this.username);
+						System.out.println("Logged Out Dealer: " + this.username);
 					}
 				}
 				// try to add logout here
@@ -186,7 +186,7 @@ public class Server {
 		private void handleLogin(Message incomingMessage) throws IOException {
 			this.username = incomingMessage.getUsername();
 			String password = incomingMessage.getPassword();		
-			boolean authenticated = false;
+			
 			
 			// Reads from "database" by line separated into parts
 			try (BufferedReader reader = new BufferedReader(new FileReader("src\\players.txt"))) {
@@ -206,16 +206,14 @@ public class Server {
 							Message success = new Message(MessageType.LOGIN, username, password, balance, "Login successful.", null, null, -1 );
 		                    this.outStream.writeObject(success);
 		                    
-		                 // Set to true because login matched
-							authenticated = true;
-							break;
+		        
 						} else {
 							// Reject logins because username isn't null
 							Message alreadyLoggedIn = new Message(MessageType.LOGIN, username, password, balance, "Already logged in.", null, null, -1);
 							this.outStream.writeObject(alreadyLoggedIn);
 							
 						}
-						
+						return;
 						//break;
 					}
 				}
@@ -224,7 +222,7 @@ public class Server {
 		        e.printStackTrace();
 		    }
 
-			if (!authenticated) {
+			
 				try (BufferedReader reader = new BufferedReader(new FileReader("src\\dealers.txt"))) {
 					String line;
 					
@@ -244,19 +242,16 @@ public class Server {
 								this.outStream.writeObject(alreadyLoggedIn);
 							}
 							
-							authenticated = true;
-							break;
+							return;
 						}
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-			}
 			
-			if (!authenticated) {
 				Message fail = new Message(MessageType.LOGIN, username, password, 0, "Invalid username or password.", null, null, -1);
 				this.outStream.writeObject(fail);
-			}
+		
 		}
 		
 		private void handleLogout(Message incomingMessage) throws IOException {
