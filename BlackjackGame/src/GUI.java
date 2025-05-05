@@ -9,7 +9,7 @@ public class GUI extends JFrame {
 	private JPanel mainPanel;
 	private Client client;
 	private Player player;
-	private int tableID;
+	private int tableID = -1;
 	private LoginPanel loginPanel;
 	private LobbyPanel lobbyPanel;
 	private TablePanel tablePanel;

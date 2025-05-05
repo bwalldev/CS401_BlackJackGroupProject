@@ -21,7 +21,9 @@ public class Server {
 		ServerSocket serverSocket = null;
 		
 		// Test table
-		tables.add(new Table(new Dealer("dealer1", "pass1")));
+		for (int i = 0; i < 3; i++) {
+		    tables.add(new Table());
+		}
 		
 		try {
 			// Initializing the ServerSocket and making sure that the port address can be used again if closed 
@@ -139,6 +141,9 @@ public class Server {
 				case LEAVE_TABLE:
 					
 					break;
+				case CREATE_TABLE:
+					handleCreateTable(incomingMessage);
+					break;
 				case HIT:
 					
 					break;
@@ -186,26 +191,6 @@ public class Server {
 			return null;
 		}
 		
-		private void handleJoinTable(Message incomingMessage) throws IOException {
-			int tableID = incomingMessage.getTableID();
-			
-			// If Table is full, send a table full message
-			if (tables.get(tableID).getPlayers().size() >= 6) {
-				Message outMessage = new Message(MessageType.TABLE_FULL, "", "", 0, "Table 1 is full", "Server", null, tableID);
-				
-				this.outStream.writeObject(outMessage);
-				this.outStream.flush();
-			}
-			// Table has an open seat
-			else {
-				Message outMessage = new Message(MessageType.JOIN_TABLE, incomingMessage.getUsername(), "", incomingMessage.getBalance(), "Joining Table 1", "Server", null, tableID);
-				
-				tables.get(tableID).addPlayer(new Player(incomingMessage.getUsername(), incomingMessage.getPassword(), incomingMessage.getBalance()));
-				
-				this.outStream.writeObject(outMessage);
-				this.outStream.flush();
-			}
-		}
 		
 		private void handleLogin(Message incomingMessage) throws IOException {
 			this.username = incomingMessage.getUsername();
@@ -296,6 +281,71 @@ public class Server {
 			Message logoutMessage = new Message(MessageType.LOGOUT, null, null, 0, "You've been logged out", null, null, -1);
 			
 			this.outStream.writeObject(logoutMessage);
+		}
+		
+		private void handleJoinTable(Message incomingMessage) throws IOException {
+			int tableID = incomingMessage.getTableID();
+			Player player = getLoggedInPlayer(incomingMessage.getUsername());
+			
+			if (player == null) {
+				return;
+			}
+			
+			Table table = tables.get(tableID);
+			
+			if (player.getTableID() != -1) {
+				Message alreadyJoined = new Message(MessageType.JOIN_TABLE, player.getUsername(), "", player.getBalance(), "Already in a table.", "Server", null, player.getTableID());
+				this.outStream.writeObject(alreadyJoined);
+				
+				this.outStream.flush();
+				return;
+			}
+			
+			// If Table is full, send a table full message
+			if (table.getPlayers().size() >= 6) {
+				Message outMessage = new Message(MessageType.TABLE_FULL, "", "", 0, "Table " + (tableID + 1) + " is full", "Server", null, tableID);
+				
+				this.outStream.writeObject(outMessage);
+				this.outStream.flush();
+				return;
+			}
+			
+			// Table has an open seat
+			
+			table.addPlayer(player);
+			player.setTableID(tableID);
+			
+			Message outMessage = new Message(MessageType.JOIN_TABLE, player.getUsername(), "", player.getBalance(), "Joined Table " + (tableID +1), "Server", null, tableID);
+			this.outStream.writeObject(outMessage);
+			
+		}
+		
+		private void handleCreateTable(Message incomingMessage) throws IOException {
+			Dealer dealer = getLoggedInDealer(incomingMessage.getUsername());
+			
+			if (dealer == null) {
+				return;
+			}
+			
+			for (int i = 0; i < tables.size(); i++) {
+				Table table = tables.get(i);
+				
+				if (table.getDealer() == null) {
+					table.setDealer(dealer);
+					dealer.setTableID(i);
+					
+					
+					Message tableCreated = new Message(MessageType.CREATE_TABLE, dealer.getUsername(), null, 0, "Table " + (i + 1) + " created.", "Server", null, i);
+					this.outStream.writeObject(tableCreated);
+					this.outStream.flush();
+					return;
+					
+				}
+				
+			}
+			Message failMessage = new Message(MessageType.CREATE_TABLE, dealer.getUsername(), null, 0, "Tables full.", "Server", null, -1);
+			this.outStream.writeObject(failMessage);
+			this.outStream.flush();
 		}
 	}
 	

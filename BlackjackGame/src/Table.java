@@ -7,9 +7,9 @@ public class Table {
     private int maxDealers;
     private Game game;
 
-    public Table(Dealer dealer) {
+    public Table() {
 	this.players = new ArrayList<>();
-	this.dealer = dealer;
+	this.dealer = null;
 	this.maxPlayers = 6; //6 Players maximum per table
 	this.maxDealers = 1; //1 Dealer maximum per table
 	this.game = new Game(this.players, this.dealer, this.maxPlayers);
@@ -30,7 +30,7 @@ public class Table {
     }
 
     public Dealer getDealer() {
-    	return dealer;
+    	return this.dealer;
     }
 
     public int getMaxPlayers() {
@@ -43,6 +43,10 @@ public class Table {
     
     public Game getGame() {
     	return this.game;
+    }
+    
+    public void setDealer(Dealer dealer) {
+        this.dealer = dealer;
     }
 
     public boolean isEmpty() {

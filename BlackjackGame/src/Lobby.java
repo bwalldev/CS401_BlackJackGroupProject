@@ -9,9 +9,9 @@ public class Lobby {
         this.maxTables = 3;
     }
 
-    public void addTable(Dealer dealer) {
+    public void addTable() {
         if(tables.size() < maxTables) {
-            tables.add(new Table(dealer));
+            tables.add(new Table());
         }
     }
 
