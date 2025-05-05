@@ -1,4 +1,5 @@
 import org.junit.jupiter.api.BeforeEach;
+
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -12,11 +13,11 @@ class TableTest {
 	private Dealer dealer;
 	
 	@BeforeEach
-	void setUp();
+	void setUp() {
 		table = new Table();
-		player1 = new Player("Alice");
-		player2 = new Player("Bob");
-		dealer - new Dealer("John");
+		player1 = new Player("RedMist2", "Java_22", 400);
+		player2 = new Player("Bobbybee", "UncBobbyBeebb", 69000);
+		dealer = new Dealer("JonSnow", "WoW2030");
 	}
 	
 	@Test
@@ -29,7 +30,7 @@ class TableTest {
 	@Test
 	void testAddPlayerExceedLimit() {
 		for (int i = 0; i < table.getMaxPlayers() + i; i++) {
-			table.addPlayer(new Player("Player" + i));
+			table.addPlayer(new Player("Player" + i,"password" + i, 100 * i));
 		}
 		assertEquals(table.getMaxPlayers(), table.getNumPlayers());
 	}
