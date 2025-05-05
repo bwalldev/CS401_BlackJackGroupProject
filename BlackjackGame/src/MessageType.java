@@ -14,5 +14,6 @@ public enum MessageType {
 	LOSE,
 	BUSTED,
 	TABLE_COUNT,
-	TABLE_FULL
+	TABLE_FULL,
+	NO_DEALER
 }

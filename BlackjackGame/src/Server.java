@@ -301,8 +301,16 @@ public class Server {
 				return;
 			}
 			
+			if (table.getDealer() == null) {
+				Message outMessage = new Message(MessageType.NO_DEALER, "", "", 0, "No Dealer Present, Cannot Join.", "Server", null, tableID);
+				
+				this.outStream.writeObject(outMessage);
+				this.outStream.flush();
+				return;
+			}
+			
 			// If Table is full, send a table full message
-			if (table.getPlayers().size() >= 6) {
+			if (table.getPlayers().size() >= 2) {
 				Message outMessage = new Message(MessageType.TABLE_FULL, "", "", 0, "Table " + (tableID + 1) + " is full", "Server", null, tableID);
 				
 				this.outStream.writeObject(outMessage);

@@ -158,7 +158,14 @@ public class LobbyPanel extends JPanel {
 		
 		lobbyButton1.addActionListener(e -> {
 			gui.getClient().sendJoinTableMessage(gui.getPlayer().getUsername(), 0);
-			
+		});
+		
+		lobbyButton2.addActionListener(e -> {
+			gui.getClient().sendJoinTableMessage(gui.getPlayer().getUsername(), 1);
+		});
+		
+		lobbyButton3.addActionListener(e -> {
+			gui.getClient().sendJoinTableMessage(gui.getPlayer().getUsername(), 2);
 		});
 		
 		createTableButton.addActionListener(e -> {
