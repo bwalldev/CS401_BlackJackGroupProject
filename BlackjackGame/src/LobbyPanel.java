@@ -161,6 +161,11 @@ public class LobbyPanel extends JPanel {
 			
 		});
 		
+		createTableButton.addActionListener(e -> {
+		    String username = gui.getPlayer().getUsername();
+		    gui.getClient().sendCreateTableMessage(username);
+		});
+		
 		this.revalidate();
 		this.repaint();
 	}

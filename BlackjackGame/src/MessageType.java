@@ -4,6 +4,7 @@ public enum MessageType {
 	STAY,
 	JOIN_TABLE,
 	LEAVE_TABLE,
+	CREATE_TABLE,
 	LOGIN,
 	LOGOUT,
 	WITHDRAWAL,
