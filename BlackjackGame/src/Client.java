@@ -121,19 +121,6 @@ public class Client {
     
     }
     
-    public void sendCreateTableMessage(String username) {
-    	Message createMessage = new Message(MessageType.CREATE_TABLE, username, null, 0, "Create Table", "Client", null, -1);
-    	
-    	try {
-    		this.outStream.writeObject(createMessage);
-    		this.outStream.flush();
-    		
-    	} catch (IOException except) {
-    		except.printStackTrace();
-    	}
-    	
-    }
-    
     public void sendDepositMessage(String username, int balance) {
     	Message depositMessage = new Message(MessageType.DEPOSIT, username, null, balance, "Deposit", "Client", null, -1);
     	
@@ -190,8 +177,6 @@ public class Client {
     			 this.inStream.close();
              if (this.outStream != null) 
             	 this.outStream.close();
-             if (this.socket != null && this.socket.isClosed() == false)
-            	 this.socket.close();
              System.out.println("Disconnected! ");
     	}
     	catch(IOException e) {
@@ -248,25 +233,8 @@ public class Client {
     		gui.getCardLayout().show(gui.getMainPanel(), "login");
     		break;
     	case JOIN_TABLE:
-    		gui.setTableID(msg.getTableID());
-    		gui.showTable();
-    		
-    		gui.getCardLayout().show(gui.getMainPanel(), "table");
     		break;
     	case LEAVE_TABLE:
-    		break;
-    		
-    	case CREATE_TABLE:
-    		if (msg.getTableID() != -1) {
-    			gui.setTableID(msg.getTableID());
-    			gui.showTable();
-    		} else {
-    			JOptionPane.showMessageDialog(null, msg.getText(), "Table Creation Failed", JOptionPane.ERROR_MESSAGE);
-    		}
-    		break;
-    	case TABLE_FULL:
-    		JOptionPane.showMessageDialog(null, "Table is full", "Join Table Error", JOptionPane.ERROR_MESSAGE);
-    		
     		break;
     	case HIT:
     		break;

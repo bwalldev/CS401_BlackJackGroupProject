@@ -4,7 +4,6 @@ public enum MessageType {
 	STAY,
 	JOIN_TABLE,
 	LEAVE_TABLE,
-	CREATE_TABLE,
 	LOGIN,
 	LOGOUT,
 	WITHDRAWAL,
@@ -13,6 +12,5 @@ public enum MessageType {
 	WIN,
 	LOSE,
 	BUSTED,
-	TABLE_COUNT,
-	TABLE_FULL
+	TABLE_COUNT
 }

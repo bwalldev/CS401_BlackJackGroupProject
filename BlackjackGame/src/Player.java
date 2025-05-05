@@ -2,7 +2,6 @@
 public class Player {
     private final int id;
     private static int idCount = 0;
-    private int tableID = -1;
     private String username;
     private String password;
     private int balance;
@@ -24,10 +23,6 @@ public class Player {
 	
     public int getID() {
 	return this.id;
-    }
-    
-    public int getTableID() {
-    	return this.tableID;
     }
 	
     public String getUsername() {
@@ -54,10 +49,6 @@ public class Player {
 	return this.currBet;
     }
 	
-    public void setTableID(int id) {
-    	this.tableID = id;
-    }
-    
     public void setBalance(int balance) {
 	if (balance >= 0)
 	    this.balance = balance;
