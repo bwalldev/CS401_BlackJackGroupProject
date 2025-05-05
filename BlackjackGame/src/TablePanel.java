@@ -21,11 +21,11 @@ public class TablePanel extends JPanel {
     }
     
     public void updatePanel() {
+    	this.removeAll();
     	
-    	this.setLayout(new BorderLayout()); // Ensure layout supports NORTH and SOUTH
-
+    	// Redo, just using to test
     	if (gui.getPlayer() instanceof Dealer) {
-    	    // Show Close Table only for Dealer
+    	    
     	    JButton closeButton = new JButton("Close Table");
     	    closeButton.addActionListener(e -> {
     	        String username = gui.getPlayer().getUsername();
@@ -34,7 +34,7 @@ public class TablePanel extends JPanel {
     	    });
     	    this.add(closeButton, BorderLayout.NORTH);
     	} else {
-    	    // Show Leave Table only for Player
+    	    
     	    JButton leaveButton = new JButton("Leave Table");
     	    leaveButton.addActionListener(e -> {
     	        String username = gui.getPlayer().getUsername();
