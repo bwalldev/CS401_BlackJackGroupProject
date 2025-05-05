@@ -19,6 +19,8 @@ public class Server {
 	public static void main(String[] args) {
 		// What Client Sockets will connect to
 		ServerSocket serverSocket = null;
+		
+		// Test table
 		tables.add(new Table(new Dealer("dealer1", "pass1")));
 		
 		try {
@@ -131,6 +133,7 @@ public class Server {
 					handleLogout(incomingMessage);
 					return;
 				case JOIN_TABLE:
+					handleJoinTable(incomingMessage);
 					
 					break;
 				case LEAVE_TABLE:
@@ -181,6 +184,27 @@ public class Server {
 				}
 			}
 			return null;
+		}
+		
+		private void handleJoinTable(Message incomingMessage) throws IOException {
+			int tableID = incomingMessage.getTableID();
+			
+			// If Table is full, send a table full message
+			if (tables.get(tableID).getPlayers().size() >= 6) {
+				Message outMessage = new Message(MessageType.TABLE_FULL, "", "", 0, "Table 1 is full", "Server", null, tableID);
+				
+				this.outStream.writeObject(outMessage);
+				this.outStream.flush();
+			}
+			// Table has an open seat
+			else {
+				Message outMessage = new Message(MessageType.JOIN_TABLE, incomingMessage.getUsername(), "", incomingMessage.getBalance(), "Joining Table 1", "Server", null, tableID);
+				
+				tables.get(tableID).addPlayer(new Player(incomingMessage.getUsername(), incomingMessage.getPassword(), incomingMessage.getBalance()));
+				
+				this.outStream.writeObject(outMessage);
+				this.outStream.flush();
+			}
 		}
 		
 		private void handleLogin(Message incomingMessage) throws IOException {
