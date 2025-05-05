@@ -9,8 +9,13 @@ public class GUI extends JFrame {
 	private JPanel mainPanel;
 	private Client client;
 	private Player player;
+	private int tableID = -1;
+	private LoginPanel loginPanel;
+	private LobbyPanel lobbyPanel;
+	private TablePanel tablePanel;
 	
 	public GUI() throws IOException {
+		this.tableID = -1;
 		this.player = new Player("Player 1", "", 0);
 		this.client = new Client(this);
 		this.setTitle("G2 BlackJack");
@@ -18,11 +23,17 @@ public class GUI extends JFrame {
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+		this.loginPanel = new LoginPanel(this);
+		this.lobbyPanel = new LobbyPanel(this);
+		this.tablePanel = new TablePanel(this);
+		
 		cardLayout = new CardLayout();
 		mainPanel = new JPanel(cardLayout);
 		
-		mainPanel.add(new LoginPanel(this), "login");
-		mainPanel.add(new LobbyPanel(this), "lobby");
+		mainPanel.add(this.loginPanel, "login");
+		mainPanel.add(this.lobbyPanel, "lobby");
+		mainPanel.add(this.tablePanel, "table");
+
 		
 		this.add(mainPanel);
 		this.setVisible(true);
@@ -30,6 +41,14 @@ public class GUI extends JFrame {
 	
 	public void setClient(Client client) {
 		this.client = client;
+	}
+	
+	public void setTableID(int id) {
+		this.tableID = id;
+	}
+	
+	public int getTableID() {
+		return this.tableID;
 	}
 	
 	public Client getClient() {
@@ -57,12 +76,25 @@ public class GUI extends JFrame {
 	}
 	
 	public void showLobby() {
-		mainPanel.remove(mainPanel.getComponent(1));
-		mainPanel.add(new LobbyPanel(this), "lobby");
+		this.lobbyPanel.updatePanel();
 		cardLayout.show(mainPanel, "lobby");
+	}
+	
+	public void showTable() {
+		this.tablePanel.updatePanel();
+		cardLayout.show(mainPanel, "table");
 	}
 	
 	public static void main(String[] args) throws IOException {
 		GUI gui = new GUI();
+	}
+	
+	public void displayLobby() {
+		this.lobbyPanel.updatePanel();
+		
+		this.cardLayout.show(this.mainPanel, "lobby");
+		
+		this.mainPanel.revalidate();
+		this.mainPanel.repaint();
 	}
 }
