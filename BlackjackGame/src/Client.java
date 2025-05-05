@@ -226,7 +226,7 @@ public class Client {
     	case LOGOUT:
     		this.loggedIn = false;
     		
-    		JOptionPane.showMessageDialog(null, "You have been logged.", "Logout", JOptionPane.INFORMATION_MESSAGE);
+    		JOptionPane.showMessageDialog(null, "You have been logged out.", "Logout", JOptionPane.INFORMATION_MESSAGE);
     		
     		gui.setPlayer("", "", 0);
     		
