@@ -22,6 +22,12 @@ public class Table {
     public int getNumPlayers() {
     	return players.size();
     }
+    
+    public void addPlayer(Player player) {
+    	if (this.players.size() < this.maxPlayers) {
+    		players.add(player);
+    	}
+    }
 
     public Dealer getDealer() {
     	return dealer;
