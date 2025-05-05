@@ -48,6 +48,10 @@ public class Table {
     public void setDealer(Dealer dealer) {
         this.dealer = dealer;
     }
+    
+    public void removePlayer(Player p) {
+        this.players.remove(p);
+    }
 
     public boolean isEmpty() {
     	return players.isEmpty();
