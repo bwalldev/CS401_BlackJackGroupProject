@@ -188,23 +188,39 @@ public class Server {
 		
 		private void handleJoinTable(Message incomingMessage) throws IOException {
 			int tableID = incomingMessage.getTableID();
+			Player player = getLoggedInPlayer(incomingMessage.getUsername());
+			
+			if (player == null) {
+				return;
+			}
+			
+			Table table = tables.get(tableID);
+			
+			if (player.getTableID() != -1) {
+				Message alreadyJoined = new Message(MessageType.JOIN_TABLE, player.getUsername(), "", player.getBalance(), "Already in a table.", "Server", null, player.getTableID());
+				this.outStream.writeObject(alreadyJoined);
+				
+				this.outStream.flush();
+				return;
+			}
 			
 			// If Table is full, send a table full message
-			if (tables.get(tableID).getPlayers().size() >= 6) {
-				Message outMessage = new Message(MessageType.TABLE_FULL, "", "", 0, "Table 1 is full", "Server", null, tableID);
+			if (table.getPlayers().size() >= 6) {
+				Message outMessage = new Message(MessageType.TABLE_FULL, "", "", 0, "Table " + (tableID + 1) + " is full", "Server", null, tableID);
 				
 				this.outStream.writeObject(outMessage);
 				this.outStream.flush();
+				return;
 			}
+			
 			// Table has an open seat
-			else {
-				Message outMessage = new Message(MessageType.JOIN_TABLE, incomingMessage.getUsername(), "", incomingMessage.getBalance(), "Joining Table 1", "Server", null, tableID);
-				
-				tables.get(tableID).addPlayer(new Player(incomingMessage.getUsername(), incomingMessage.getPassword(), incomingMessage.getBalance()));
-				
-				this.outStream.writeObject(outMessage);
-				this.outStream.flush();
-			}
+			
+			table.addPlayer(player);
+			player.setTableID(tableID);
+			
+			Message outMessage = new Message(MessageType.JOIN_TABLE, player.getUsername(), "", player.getBalance(), "Joined Table " + (tableID +1), "Server", null, tableID);
+			this.outStream.writeObject(outMessage);
+			
 		}
 		
 		private void handleLogin(Message incomingMessage) throws IOException {
