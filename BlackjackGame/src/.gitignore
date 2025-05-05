@@ -18,3 +18,7 @@
 /LobbyPanel.class
 /LoginPanel.class
 /TablePanel.class
+/DealerPanel.class
+/MessageType.class
+/PlayerPanel.class
+/Server$ClientHandler.class
