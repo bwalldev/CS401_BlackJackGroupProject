@@ -268,6 +268,10 @@ public class Client {
     		JOptionPane.showMessageDialog(null, "Table is full", "Join Table Error", JOptionPane.ERROR_MESSAGE);
     		
     		break;
+    	case NO_DEALER:
+    		JOptionPane.showMessageDialog(null, "No Dealer Present. Cannot Join", "No Dealer Present", JOptionPane.ERROR_MESSAGE);
+    		
+    		break;
     	case HIT:
     		break;
     	case STAY:
