@@ -21,7 +21,7 @@ public class Server {
 		ServerSocket serverSocket = null;
 		
 		// Test table
-		//tables.add(new Table(new Dealer("dealer1", "pass1")));
+		tables.add(new Table(new Dealer("dealer1", "pass1")));
 		
 		try {
 			// Initializing the ServerSocket and making sure that the port address can be used again if closed 
@@ -189,13 +189,14 @@ public class Server {
 		private void handleJoinTable(Message incomingMessage) throws IOException {
 			int tableID = incomingMessage.getTableID();
 			
-			// Table is full, send a table full message
+			// If Table is full, send a table full message
 			if (tables.get(tableID).getPlayers().size() >= 6) {
-				Message outMessage = new Message(MessageType.JOIN_TABLE, "", "", 0, "Table 1 is full", "Server", null, tableID);
+				Message outMessage = new Message(MessageType.TABLE_FULL, "", "", 0, "Table 1 is full", "Server", null, tableID);
 				
 				this.outStream.writeObject(outMessage);
 				this.outStream.flush();
 			}
+			// Table has an open seat
 			else {
 				Message outMessage = new Message(MessageType.JOIN_TABLE, incomingMessage.getUsername(), "", incomingMessage.getBalance(), "Joining Table 1", "Server", null, tableID);
 				

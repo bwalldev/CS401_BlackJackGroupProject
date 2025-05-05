@@ -236,10 +236,15 @@ public class Client {
     		break;
     	case JOIN_TABLE:
     		gui.setTableID(msg.getTableID());
+    		gui.showTable();
     		
     		gui.getCardLayout().show(gui.getMainPanel(), "table");
     		break;
     	case LEAVE_TABLE:
+    		break;
+    	case TABLE_FULL:
+    		JOptionPane.showMessageDialog(null, "Table is full", "Join Table Error", JOptionPane.ERROR_MESSAGE);
+    		
     		break;
     	case HIT:
     		break;
