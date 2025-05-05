@@ -1,5 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
+
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -21,12 +23,13 @@ public class TablePanel extends JPanel {
     }
     
     public void updatePanel() {
-    	
-    	this.setLayout(new BorderLayout()); // Ensure layout supports NORTH and SOUTH
+    	this.removeAll();
+    	this.setLayout(new BorderLayout());
 
     	if (gui.getPlayer() instanceof Dealer) {
     	    // Show Close Table only for Dealer
     	    JButton closeButton = new JButton("Close Table");
+    	    
     	    closeButton.addActionListener(e -> {
     	        String username = gui.getPlayer().getUsername();
     	        int tableID = gui.getTableID();
@@ -44,8 +47,8 @@ public class TablePanel extends JPanel {
     	    this.add(leaveButton, BorderLayout.SOUTH);
     	}
     	
-    	
     	this.title.setText("Table ID: " + gui.getTableID());
+    	this.add(title);
     	this.revalidate();
     	this.repaint();
     }
