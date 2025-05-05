@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+//table test all 6 of the classes run please feel free to check if i left anything out 
 class TableTest {
 	private Table table;
 	private Player player1;
