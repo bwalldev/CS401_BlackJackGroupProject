@@ -67,8 +67,20 @@ public class Client {
   	  
   }
     
-    public void sendHitMessage(String username, Card card) {
-    	Message hitMessage = new Message(MessageType.HIT, username, null, 0, "Hit", "Client", card, -1);
+    public void sendRequestHitMessage(String username, int tableID) {
+    	Message requestMessage = new Message(MessageType.REQUEST_HIT, username, null, 0, "Player requested a hit", "Client", null, tableID);
+    	
+    	  try {
+  			this.outStream.writeObject(requestMessage);
+  			this.outStream.flush();
+  			
+  		  } catch (IOException  except) {
+  			except.printStackTrace();
+  		  }
+    }
+    
+    public void sendHitMessage(String playerUsername, Card card, int tableID) {
+    	Message hitMessage = new Message(MessageType.HIT, playerUsername, null, 0, "Hit", "Client", card, tableID);
     	
     	try {
     		this.outStream.writeObject(hitMessage);
@@ -289,6 +301,13 @@ public class Client {
     		
     		break;
     	case HIT:
+    		Card card = msg.getCard();
+   		 	gui.getPlayer().addCardToHand(card); 
+
+   		 	gui.addCardToPlayerHand(card);
+    		break;
+    	case REQUEST_HIT:
+    		gui.addHitRequest(msg.getUsername());
     		break;
     	case STAY:
     		break;
