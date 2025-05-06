@@ -216,10 +216,20 @@ public class Server {
 			Card card = incomingMessage.getCard();
 			
 			Player player = getLoggedInPlayer(playerName);
+			Dealer dealer = getLoggedInDealer(playerName);
 			
-			player.addCardToHand(card);
+			Message addCard = null;
 			
-			Message addCard = new Message(MessageType.HIT, playerName, null, player.getBalance(), "You received: " + card.getSymbol() + "of" + card.getSuit(), "Server", card, tableID);
+			if (player != null) {
+				getLoggedInPlayer(playerName).addCardToHand(card);
+				addCard = new Message(MessageType.HIT, playerName, null, player.getBalance(), "You received: " + card.getSymbol() + "of" + card.getSuit(), "Server", card, tableID);
+			}
+			else if (dealer != null) {
+				getLoggedInDealer(playerName).addCardToHand(card);
+				addCard = new Message(MessageType.HIT, playerName, null, dealer.getBalance(), "You received: " + card.getSymbol() + "of" + card.getSuit(), "Server", card, tableID);
+			}
+			
+			//player.addCardToHand(card);
 			
 			  ObjectOutputStream playerOut = getStreamForUser(playerName);
 			    if (playerOut != null) {

@@ -287,6 +287,8 @@ public class Client {
     	case CREATE_TABLE:
     		if (msg.getTableID() != -1) {
     			gui.setTableID(msg.getTableID());
+    			Table newTable = new Table();
+      	        gui.setTable(newTable);
     			gui.showTable();
     		} else {
     			JOptionPane.showMessageDialog(null, msg.getText(), "Table Creation Failed", JOptionPane.ERROR_MESSAGE);
@@ -302,9 +304,13 @@ public class Client {
     		break;
     	case HIT:
     		Card card = msg.getCard();
-   		 	gui.getPlayer().addCardToHand(card); 
+   		 	//gui.getPlayer().addCardToHand(card); 
 
    		 	gui.addCardToPlayerHand(card);
+   		 	
+   		 	if (gui.getPlayer().getHandValue() > 21) {
+   		 		JOptionPane.showMessageDialog(null, "YOU BUSTED! SORRY LOSER!", "HAHAHAHAHA", JOptionPane.INFORMATION_MESSAGE);
+   		 	}
     		break;
     	case REQUEST_HIT:
     		gui.addHitRequest(msg.getUsername());
