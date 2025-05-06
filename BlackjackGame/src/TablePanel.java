@@ -125,7 +125,7 @@ public class TablePanel extends JPanel {
     		gui.getClient().sendClearHandMessage(gui.getPlayer().getUsername(), gui.getTableID());
     		gui.getPlayer().clearPlayerHand();
     		
-    		updatePanel();
+    		//updatePanel();
     	});
     	
     	menuPanel.add(leaveButton);
