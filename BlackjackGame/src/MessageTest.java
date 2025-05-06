@@ -1,11 +1,18 @@
 import static org.junit.jupiter.api.Assertions.*;
-
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runners.MethodSorters;
 import org.junit.*;
 
+
+
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class MessageTest {
+	
+	@BeforeEach
+    void setup() {
+        Message.resetIDCount(); // resets the static ID counter before each test
+    }
 
 	@Test
 	void a_testGetID() {
