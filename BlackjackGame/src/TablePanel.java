@@ -78,8 +78,12 @@ public class TablePanel extends JPanel {
     	JButton stayButton = new JButton("Stay");
     	stayButton.setPreferredSize(new Dimension(120, 30));
     	
+    	JButton clearButton = new JButton("Clear Hands");
+    	clearButton.setPreferredSize(new Dimension(120, 30));
+    	
     	menuPanel.add(hitButton);
     	menuPanel.add(stayButton);
+    	menuPanel.add(clearButton);
 
     	JButton leaveButton;
     	
@@ -113,8 +117,15 @@ public class TablePanel extends JPanel {
     		gui.getClient().sendRequestHitMessage(username, tableID);
     	});
     	
-    	hitButton.addActionListener(e -> {
+    	stayButton.addActionListener(e -> {
     		
+    	});
+    	
+    	clearButton.addActionListener(e -> {
+    		gui.getClient().sendClearHandMessage(gui.getPlayer().getUsername(), gui.getTableID());
+    		gui.getPlayer().clearPlayerHand();
+    		
+    		updatePanel();
     	});
     	
     	menuPanel.add(leaveButton);
