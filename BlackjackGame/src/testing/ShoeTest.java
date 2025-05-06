@@ -1,7 +1,8 @@
 package testing;
-import static org.junit.jupiter.api.Assertions.*;
 
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
+import main.Shoe;
 
 class ShoeTest {
 

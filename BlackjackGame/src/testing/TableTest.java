@@ -1,9 +1,11 @@
 package testing;
+
 import org.junit.jupiter.api.BeforeEach;
-
 import org.junit.jupiter.api.Test;
-
 import java.util.ArrayList;
+import main.Table;
+import main.Player;
+import main.Dealer;
 
 import static org.junit.jupiter.api.Assertions.*;
 //table test all 6 of the classes run please feel free to check if i left anything out 
