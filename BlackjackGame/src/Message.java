@@ -67,4 +67,10 @@ public class Message implements Serializable {
 	public Card getCard() {
 		return this.card;
 	}
+	
+	// For testing use only
+	public static void resetIDCount() {
+		idCount = 0;
+	}
+
 }
