@@ -11,7 +11,7 @@ public class Lobby {
 
     public void addTable(Dealer dealer) {
         if(tables.size() < maxTables) {
-            tables.add(new Table(dealer));
+            tables.add(new Table());
         }
     }
 
