@@ -1,6 +1,7 @@
 
 public enum MessageType {
 	HIT,
+	REQUEST_HIT,
 	STAY,
 	JOIN_TABLE,
 	LEAVE_TABLE,
