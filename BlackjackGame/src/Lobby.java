@@ -18,6 +18,7 @@ public class Lobby {
     public void removeTable(Table table) {
         tables.remove(table);
     }
+
     public int getTableCount() {
     	return tables.size();
     }
