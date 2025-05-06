@@ -15,11 +15,16 @@ public class Server {
 	private static List<Player> loggedInPlayers = new ArrayList<>();
 	private static List<Dealer> loggedInDealers = new ArrayList<>();
 	private static List<Table> tables = new ArrayList<Table>();
+	private static List<ClientHandler> clientHandlers = new ArrayList<>();
 	
 	public static void main(String[] args) {
 		// What Client Sockets will connect to
 		ServerSocket serverSocket = null;
-		tables.add(new Table(new Dealer("dealer1", "pass1")));
+		
+		// Test table
+		for (int i = 0; i < 3; i++) {
+		    tables.add(new Table());
+		}
 		
 		try {
 			// Initializing the ServerSocket and making sure that the port address can be used again if closed 
@@ -67,6 +72,7 @@ public class Server {
 		    } catch (IOException e) {
 		        e.printStackTrace();
 		    }
+			Server.clientHandlers.add(this);
 		}
 
 		@Override
@@ -116,6 +122,7 @@ public class Server {
 				} catch (IOException except) {
 					except.printStackTrace();
 				}
+				Server.clientHandlers.remove(this);
 			}
 		}
 		
@@ -131,13 +138,23 @@ public class Server {
 					handleLogout(incomingMessage);
 					return;
 				case JOIN_TABLE:
+					handleJoinTable(incomingMessage);
 					
 					break;
 				case LEAVE_TABLE:
-					
+					handleLeaveTable(incomingMessage);
+					break;
+				case CREATE_TABLE:
+					handleCreateTable(incomingMessage);
+					break;
+				case CLOSE_TABLE:
+					handleCloseTable(incomingMessage);
 					break;
 				case HIT:
-					
+					handleHit(incomingMessage);
+					break;
+				case REQUEST_HIT:
+					handleRequestHit(incomingMessage);
 					break;
 				case STAY:
 					
@@ -162,6 +179,16 @@ public class Server {
 			}
 		}
 		
+		private ObjectOutputStream getStreamForUser(String username) {
+			for (int i = 0; i < Server.clientHandlers.size(); i++) {
+				ClientHandler channel = Server.clientHandlers.get(i);
+				if (username.equals(channel.username)) {
+					return channel.outStream;
+				}
+			}
+			return null;
+		}
+		
 		// Search loggedInPlayer list for player with the username
 		private Player getLoggedInPlayer(String username) {
 			for (int i = 0; i < Server.loggedInPlayers.size(); i++) {
@@ -182,6 +209,40 @@ public class Server {
 			}
 			return null;
 		}
+		
+		private void handleHit(Message incomingMessage) throws IOException {
+			int tableID = incomingMessage.getTableID();
+			String playerName = incomingMessage.getUsername();
+			Card card = incomingMessage.getCard();
+			
+			Player player = getLoggedInPlayer(playerName);
+			
+			player.addCardToHand(card);
+			
+			Message addCard = new Message(MessageType.HIT, playerName, null, player.getBalance(), "You received: " + card.getSymbol() + "of" + card.getSuit(), "Server", card, tableID);
+			
+			  ObjectOutputStream playerOut = getStreamForUser(playerName);
+			    if (playerOut != null) {
+			        playerOut.writeObject(addCard);
+			        playerOut.flush();
+			    }
+		}
+		
+		private void handleRequestHit(Message incomingMessage) throws IOException {
+			int tableID = incomingMessage.getTableID();
+			Table table = tables.get(tableID);
+			
+			// Finds dealer at the table
+			Dealer dealer = table.getDealer();
+			ObjectOutputStream dealerOut = getStreamForUser(dealer.getUsername());
+			
+			// Forwards hit request to the dealer
+			if (dealerOut != null) {
+				dealerOut.writeObject(incomingMessage);
+				dealerOut.flush();
+			}
+		}
+		
 		
 		private void handleLogin(Message incomingMessage) throws IOException {
 			this.username = incomingMessage.getUsername();
@@ -272,6 +333,136 @@ public class Server {
 			Message logoutMessage = new Message(MessageType.LOGOUT, null, null, 0, "You've been logged out", null, null, -1);
 			
 			this.outStream.writeObject(logoutMessage);
+		}
+		
+		private void handleJoinTable(Message incomingMessage) throws IOException {
+			int tableID = incomingMessage.getTableID();
+			Player player = getLoggedInPlayer(incomingMessage.getUsername());
+			
+			if (player == null) {
+				return;
+			}
+			
+			Table table = tables.get(tableID);
+			
+			if (player.getTableID() != -1) {
+				Message alreadyJoined = new Message(MessageType.JOIN_TABLE, player.getUsername(), "", player.getBalance(), "Already in a table.", "Server", null, player.getTableID());
+				this.outStream.writeObject(alreadyJoined);
+				
+				this.outStream.flush();
+				return;
+			}
+			
+			if (table.getDealer() == null) {
+				Message outMessage = new Message(MessageType.NO_DEALER, "", "", 0, "No Dealer Present, Cannot Join.", "Server", null, tableID);
+				
+				this.outStream.writeObject(outMessage);
+				this.outStream.flush();
+				return;
+			}
+			
+			// If Table is full, send a table full message
+			if (table.getPlayers().size() >= 2) {
+				Message outMessage = new Message(MessageType.TABLE_FULL, "", "", 0, "Table " + (tableID + 1) + " is full", "Server", null, tableID);
+				
+				this.outStream.writeObject(outMessage);
+				this.outStream.flush();
+				return;
+			}
+			
+			// Table has an open seat
+			
+			table.addPlayer(player);
+			player.setTableID(tableID);
+			
+			Message outMessage = new Message(MessageType.JOIN_TABLE, player.getUsername(), "", player.getBalance(), "Joined Table " + (tableID +1), "Server", null, tableID);
+			this.outStream.writeObject(outMessage);
+			
+		}
+		
+		private void handleLeaveTable(Message incomingMessage) throws IOException {
+			Player player = getLoggedInPlayer(incomingMessage.getUsername());
+			int tableID = incomingMessage.getTableID();
+			
+			if (player == null || tableID < 0 || tableID >= tables.size()) {
+				return;
+			}
+			
+			Table table = tables.get(tableID);
+			table.removePlayer(player);
+			player.setTableID(-1);
+			
+			Message leaveTable = new Message(MessageType.LEAVE_TABLE, player.getUsername(), "", player.getBalance(), "You have left the table.", "Server", null, -1);
+		    this.outStream.writeObject(leaveTable);
+		    this.outStream.flush();
+		}
+		
+		private void handleCreateTable(Message incomingMessage) throws IOException {
+			Dealer dealer = getLoggedInDealer(incomingMessage.getUsername());
+			
+			if (dealer == null) {
+				return;
+			}
+			
+			for (int i = 0; i < tables.size(); i++) {
+				Table table = tables.get(i);
+				
+				if (table.getDealer() == null) {
+					table.setDealer(dealer);
+					dealer.setTableID(i);
+					
+					
+					Message tableCreated = new Message(MessageType.CREATE_TABLE, dealer.getUsername(), null, 0, "Table " + (i + 1) + " created.", "Server", null, i);
+					this.outStream.writeObject(tableCreated);
+					this.outStream.flush();
+					return;
+					
+				}
+				
+			}
+			Message failMessage = new Message(MessageType.CREATE_TABLE, dealer.getUsername(), null, 0, "Tables full.", "Server", null, -1);
+			this.outStream.writeObject(failMessage);
+			this.outStream.flush();
+		}
+		
+		private void handleCloseTable(Message incomingMessage) throws IOException {
+			Dealer dealer = getLoggedInDealer(incomingMessage.getUsername());
+			int tableID = incomingMessage.getTableID();
+			
+			if (dealer == null || tableID < 0 || tableID >= tables.size()) {
+				return;
+			}
+			
+			Table table = tables.get(tableID);
+			
+			if (table.getDealer() != dealer) {
+				return;
+			}
+			
+			 List<Player> players = new ArrayList<>(table.getPlayers());
+			 
+			 for (int i = 0; i < players.size(); i++) {
+				 Player p = players.get(i);
+				 
+				 table.removePlayer(p);
+				 p.setTableID(-1);
+				 
+				 ObjectOutputStream playerOut = getStreamForUser(p.getUsername());
+				 if (playerOut != null) {
+					 Message kickMessage = new Message(MessageType.LEAVE_TABLE, p.getUsername(), "", p.getBalance(), "The dealer closed table. You will return to lobby", "Server", null, -1);
+					 playerOut.writeObject(kickMessage);
+					 playerOut.flush();
+				 }
+				 
+			 }
+			 
+			 table.setDealer(null);
+			 dealer.setTableID(-1);
+			 
+			 Message dealerMessage = new Message(MessageType.LEAVE_TABLE, dealer.getUsername(), "", 0, "Table closed. You will return to lobby", "Server", null, -1);
+			 this.outStream.writeObject(dealerMessage);
+			 this.outStream.flush();
+			
 		}
 	}
 	

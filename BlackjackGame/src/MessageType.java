@@ -1,9 +1,12 @@
 
 public enum MessageType {
 	HIT,
+	REQUEST_HIT,
 	STAY,
 	JOIN_TABLE,
 	LEAVE_TABLE,
+	CREATE_TABLE,
+	CLOSE_TABLE,
 	LOGIN,
 	LOGOUT,
 	WITHDRAWAL,
@@ -12,5 +15,7 @@ public enum MessageType {
 	WIN,
 	LOSE,
 	BUSTED,
-	TABLE_COUNT
+	TABLE_COUNT,
+	TABLE_FULL,
+	NO_DEALER
 }

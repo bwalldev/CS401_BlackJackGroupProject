@@ -67,8 +67,20 @@ public class Client {
   	  
   }
     
-    public void sendHitMessage(String username, Card card) {
-    	Message hitMessage = new Message(MessageType.HIT, username, null, 0, "Hit", "Client", card, -1);
+    public void sendRequestHitMessage(String username, int tableID) {
+    	Message requestMessage = new Message(MessageType.REQUEST_HIT, username, null, 0, "Player requested a hit", "Client", null, tableID);
+    	
+    	  try {
+  			this.outStream.writeObject(requestMessage);
+  			this.outStream.flush();
+  			
+  		  } catch (IOException  except) {
+  			except.printStackTrace();
+  		  }
+    }
+    
+    public void sendHitMessage(String playerUsername, Card card, int tableID) {
+    	Message hitMessage = new Message(MessageType.HIT, playerUsername, null, 0, "Hit", "Client", card, tableID);
     	
     	try {
     		this.outStream.writeObject(hitMessage);
@@ -119,6 +131,32 @@ public class Client {
     		except.printStackTrace();
     	}
     
+    }
+    
+    public void sendCreateTableMessage(String username) {
+    	Message createMessage = new Message(MessageType.CREATE_TABLE, username, null, 0, "Create Table", "Client", null, -1);
+    	
+    	try {
+    		this.outStream.writeObject(createMessage);
+    		this.outStream.flush();
+    		
+    	} catch (IOException except) {
+    		except.printStackTrace();
+    	}
+    	
+    }
+    
+    public void sendCloseTableMessage(String username, int tableID) {
+    	Message closeMessage = new Message(MessageType.CLOSE_TABLE, username, null, 0, "Close Table", "Client", null, tableID);
+    	
+    	try {
+    		this.outStream.writeObject(closeMessage);
+    		this.outStream.flush();
+    		
+    	} catch (IOException except) {
+    		except.printStackTrace();
+    	}
+    	
     }
     
     public void sendDepositMessage(String username, int balance) {
@@ -177,6 +215,8 @@ public class Client {
     			 this.inStream.close();
              if (this.outStream != null) 
             	 this.outStream.close();
+             if (this.socket != null && this.socket.isClosed() == false)
+            	 this.socket.close();
              System.out.println("Disconnected! ");
     	}
     	catch(IOException e) {
@@ -226,17 +266,48 @@ public class Client {
     	case LOGOUT:
     		this.loggedIn = false;
     		
-    		JOptionPane.showMessageDialog(null, "You have been logged.", "Logout", JOptionPane.INFORMATION_MESSAGE);
+    		JOptionPane.showMessageDialog(null, "You have been logged out.", "Logout", JOptionPane.INFORMATION_MESSAGE);
     		
     		gui.setPlayer("", "", 0);
     		
     		gui.getCardLayout().show(gui.getMainPanel(), "login");
     		break;
     	case JOIN_TABLE:
+    		gui.setTableID(msg.getTableID());
+    		gui.showTable();
+    		
+    		gui.getCardLayout().show(gui.getMainPanel(), "table");
     		break;
     	case LEAVE_TABLE:
+    		JOptionPane.showMessageDialog(null, msg.getText(), "Leave Table", JOptionPane.INFORMATION_MESSAGE);
+    		gui.showLobby();
+    		gui.getCardLayout().show(gui.getMainPanel(), "lobby");
+    		break;
+    		
+    	case CREATE_TABLE:
+    		if (msg.getTableID() != -1) {
+    			gui.setTableID(msg.getTableID());
+    			gui.showTable();
+    		} else {
+    			JOptionPane.showMessageDialog(null, msg.getText(), "Table Creation Failed", JOptionPane.ERROR_MESSAGE);
+    		}
+    		break;
+    	case TABLE_FULL:
+    		JOptionPane.showMessageDialog(null, "Table is full", "Join Table Error", JOptionPane.ERROR_MESSAGE);
+    		
+    		break;
+    	case NO_DEALER:
+    		JOptionPane.showMessageDialog(null, "No Dealer Present. Cannot Join", "No Dealer Present", JOptionPane.ERROR_MESSAGE);
+    		
     		break;
     	case HIT:
+    		Card card = msg.getCard();
+   		 	gui.getPlayer().addCardToHand(card); 
+
+   		 	gui.addCardToPlayerHand(card);
+    		break;
+    	case REQUEST_HIT:
+    		gui.addHitRequest(msg.getUsername());
     		break;
     	case STAY:
     		break;
