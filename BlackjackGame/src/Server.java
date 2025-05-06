@@ -154,6 +154,10 @@ public class Server {
 					handleHitMessage(incomingMessage);
 					
 					break;
+				case REQUEST_HIT:
+					handleRequestHitMessage(incomingMessage);
+					
+					break;
 				case STAY:
 					
 					break;
@@ -212,6 +216,12 @@ public class Server {
 			Card card = tables.get(incomingMessage.getTableID()).getGame().getShoe().getCard();
 			
 			// need to add card to players hand
+			if (card != null)
+			    getLoggedInPlayer(incomingMessage.getUsername()).addCardToHand(card);
+		}
+		
+		private void handleRequestHitMessage(Message incomingMessage) {
+			
 		}
 		
 		
@@ -380,6 +390,7 @@ public class Server {
 				
 				if (table.getDealer() == null) {
 					table.setDealer(dealer);
+					table.setGame(new Game(new ArrayList<Player>(), dealer, 6));
 					dealer.setTableID(i);
 					
 					

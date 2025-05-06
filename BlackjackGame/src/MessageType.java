@@ -16,5 +16,6 @@ public enum MessageType {
 	BUSTED,
 	TABLE_COUNT,
 	TABLE_FULL,
-	NO_DEALER
+	NO_DEALER,
+	REQUEST_HIT
 }

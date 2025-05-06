@@ -28,6 +28,10 @@ public class Table {
     		players.add(player);
     	}
     }
+    
+    public void setGame(Game game) {
+    	this.game = game;
+    }
 
     public Dealer getDealer() {
     	return this.dealer;
