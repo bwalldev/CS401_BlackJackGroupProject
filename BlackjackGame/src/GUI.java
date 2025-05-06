@@ -43,9 +43,13 @@ public class GUI extends JFrame {
 	public void clearHands() {
 		this.player.clearPlayerHand();
 		
-		for (int i = 0; i < this.table.getNumPlayers(); i++) {
-			this.table.getPlayers().get(i).clearPlayerHand();
-		}
+		if (this.table != null) {
+	        for (int i = 0; i < this.table.getNumPlayers(); i++) {
+	            this.table.getPlayers().get(i).clearPlayerHand();
+	        }
+	    }
+
+	    this.tablePanel.updatePanel();
 	}
 	
 	public void setClient(Client client) {
