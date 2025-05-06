@@ -151,8 +151,10 @@ public class Server {
 					handleCloseTable(incomingMessage);
 					break;
 				case HIT:
-					handleHitMessage(incomingMessage);
-					
+					handleHit(incomingMessage);
+					break;
+				case REQUEST_HIT:
+					handleRequestHit(incomingMessage);
 					break;
 				case STAY:
 					
@@ -208,10 +210,47 @@ public class Server {
 			return null;
 		}
 		
-		private void handleHitMessage(Message incomingMessage) {
-			Card card = tables.get(incomingMessage.getTableID()).getGame().getShoe().getCard();
+		private void handleHit(Message incomingMessage) throws IOException {
+			int tableID = incomingMessage.getTableID();
+			String playerName = incomingMessage.getUsername();
+			Card card = incomingMessage.getCard();
 			
-			// need to add card to players hand
+			Player player = getLoggedInPlayer(playerName);
+			Dealer dealer = getLoggedInDealer(playerName);
+			
+			Message addCard = null;
+			
+			if (player != null) {
+				getLoggedInPlayer(playerName).addCardToHand(card);
+				addCard = new Message(MessageType.HIT, playerName, null, player.getBalance(), "You received: " + card.getSymbol() + "of" + card.getSuit(), "Server", card, tableID);
+			}
+			else if (dealer != null) {
+				getLoggedInDealer(playerName).addCardToHand(card);
+				addCard = new Message(MessageType.HIT, playerName, null, dealer.getBalance(), "You received: " + card.getSymbol() + "of" + card.getSuit(), "Server", card, tableID);
+			}
+			
+			//player.addCardToHand(card);
+			
+			  ObjectOutputStream playerOut = getStreamForUser(playerName);
+			    if (playerOut != null) {
+			        playerOut.writeObject(addCard);
+			        playerOut.flush();
+			    }
+		}
+		
+		private void handleRequestHit(Message incomingMessage) throws IOException {
+			int tableID = incomingMessage.getTableID();
+			Table table = tables.get(tableID);
+			
+			// Finds dealer at the table
+			Dealer dealer = table.getDealer();
+			ObjectOutputStream dealerOut = getStreamForUser(dealer.getUsername());
+			
+			// Forwards hit request to the dealer
+			if (dealerOut != null) {
+				dealerOut.writeObject(incomingMessage);
+				dealerOut.flush();
+			}
 		}
 		
 		

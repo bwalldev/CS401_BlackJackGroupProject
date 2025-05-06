@@ -1,6 +1,6 @@
 import java.awt.CardLayout;
 import java.io.IOException;
-
+import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -13,6 +13,7 @@ public class GUI extends JFrame {
 	private LoginPanel loginPanel;
 	private LobbyPanel lobbyPanel;
 	private TablePanel tablePanel;
+	private Table table;
 	
 	public GUI() throws IOException {
 		this.tableID = -1;
@@ -59,6 +60,14 @@ public class GUI extends JFrame {
 		return this.player;
 	}
 	
+	public Table getTable() {
+	    return table;
+	}
+	
+	public void setTable(Table table) {
+	    this.table = table;
+	}
+	
 	public void setPlayer(String username, String password, int balance) {
 		this.player = new Player(username, password, balance);
 	}
@@ -83,6 +92,14 @@ public class GUI extends JFrame {
 	public void showTable() {
 		this.tablePanel.updatePanel();
 		cardLayout.show(mainPanel, "table");
+	}
+	
+	public void addHitRequest(String playerName) {
+	    tablePanel.addPendingHitRequest(playerName);
+	}
+	
+	public void addCardToPlayerHand(Card card) {
+	    tablePanel.addCardToPlayer(card);
 	}
 	
 	public static void main(String[] args) throws IOException {
