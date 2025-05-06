@@ -1,9 +1,11 @@
 package testing;
 import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.Test;
 import org.junit.runners.MethodSorters;
 import org.junit.*;
+import main.Message;
+import main.MessageType;
+import main.Shoe;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class MessageTest {
