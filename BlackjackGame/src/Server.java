@@ -151,6 +151,7 @@ public class Server {
 					handleCloseTable(incomingMessage);
 					break;
 				case HIT:
+					handleHitMessage(incomingMessage);
 					
 					break;
 				case STAY:
@@ -205,6 +206,12 @@ public class Server {
 				}
 			}
 			return null;
+		}
+		
+		private void handleHitMessage(Message incomingMessage) {
+			Card card = tables.get(incomingMessage.getTableID()).getGame().getShoe().getCard();
+			
+			// need to add card to players hand
 		}
 		
 		
