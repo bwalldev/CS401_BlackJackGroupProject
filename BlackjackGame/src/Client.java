@@ -172,6 +172,17 @@ public class Client {
     	
     }
     
+    public void sendClearHandMessage(String username, int tableID) {
+    	Message outMessage = new Message(MessageType.CLEAR_HANDS, username, "", 0, username + " clear all hands", "Client", null, tableID);
+    	
+    	try {
+    		this.outStream.writeObject(outMessage);
+    		this.outStream.flush();
+    	} catch (IOException except) {
+    		except.printStackTrace();
+    	}
+    }
+    
     public void sendWithdrawalMessage(String username, int balance) {
     	Message withdrawMessage = new Message(MessageType.WITHDRAWAL, username, null, balance, "Withdraw", "Client", null, -1);
     	
@@ -313,6 +324,10 @@ public class Client {
     		break;
     	case REQUEST_HIT:
     		gui.addHitRequest(msg.getUsername());
+    		break;
+    	case CLEAR_HANDS:
+    		gui.clearHands();
+    		
     		break;
     	case STAY:
     		break;
