@@ -304,7 +304,6 @@ public class Client {
     		break;
     	case HIT:
     		Card card = msg.getCard();
-   		 	//gui.getPlayer().addCardToHand(card); 
 
    		 	gui.addCardToPlayerHand(card);
    		 	

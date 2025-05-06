@@ -149,13 +149,22 @@ public class TablePanel extends JPanel {
             JButton dealCardButton = new JButton("Give card to " + playerName);
             int index = i;
             dealCardButton.addActionListener(e -> {
-                
-                Card card = gui.getTable().getGame().getShoe().getCard();
-                gui.getClient().sendHitMessage(playerName, card, gui.getTableID());
-
-                // Remove from pending list
-                pendingHitRequests.remove(index);
-                updateHitRequestPanel();
+                if (gui.getPlayer() instanceof Dealer && gui.getPlayer().getHandValue() < 17) {
+	                Card card = gui.getTable().getGame().getShoe().getCard();
+	                gui.getClient().sendHitMessage(playerName, card, gui.getTableID());
+	
+	                // Remove from pending list
+	                pendingHitRequests.remove(index);
+	                updateHitRequestPanel();
+                }
+                else if(gui.getPlayer() instanceof Player) {
+                	Card card = gui.getTable().getGame().getShoe().getCard();
+	                gui.getClient().sendHitMessage(playerName, card, gui.getTableID());
+	
+	                // Remove from pending list
+	                pendingHitRequests.remove(index);
+	                updateHitRequestPanel();
+                }
             });
             hitRequestPanel.add(dealCardButton);
         }
