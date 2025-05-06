@@ -1,9 +1,7 @@
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import java.util.ArrayList;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class LobbyTest {
@@ -16,20 +14,20 @@ public class LobbyTest {
 	
 	@Test
 	void testAddTableWithinLimit() {
-		lobby.addTable();
-		lobby.addTable();
-		lobby.addTable();
-		
-		//adding more tables beyond the limit of 3
-		lobby.addTable();
+		lobby.addTable(new Dealer("dealer1", "pass1"));
+        lobby.addTable(new Dealer("dealer2", "pass2"));
+        lobby.addTable(new Dealer("dealer3", "pass3"));
+
+        // Attempting to add more than the limit of 3
+        lobby.addTable(new Dealer("dealer4", "pass4"));
 		
 		assertEquals(3, lobby.getTableCount(), "As long as you dont exceed (3)");
 	}
 	
 	@Test
 	void testRemoveTable() {
-		lobby.addTable();
-		lobby.addTable();
+		 lobby.addTable(new Dealer("dealer1", "pass1"));
+	     lobby.addTable(new Dealer("dealer2", "pass2"));
 		
 		ArrayList<Table> tables = lobby.getTables();
 		assertEquals(2, tables.size());
@@ -44,7 +42,7 @@ public class LobbyTest {
 	@Test
 	void testRemoveTableThatDoesNotExist() {
 		Table externalTable = new Table();
-		lobby.addTable();
+		 lobby.addTable(new Dealer("dealer1", "pass1"));
 		
 		int before = lobby.getTableCount();
 		lobby.removeTable(externalTable);
@@ -54,7 +52,7 @@ public class LobbyTest {
 	
 	@Test
 	void testGetTablesReturnsCopy() {
-		lobby.addTable();
+	    lobby.addTable(new Dealer("dealer1", "pass1"));
 		ArrayList<Table> retrieved = lobby.getTables();
 		
 		//clear the list 
