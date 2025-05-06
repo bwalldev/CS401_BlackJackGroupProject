@@ -122,11 +122,8 @@ public class TablePanel extends JPanel {
     	});
     	
     	clearButton.addActionListener(e -> {
-    		if (gui.getPlayer() instanceof Dealer) {
-    			gui.getClient().sendClearHandMessage(gui.getPlayer().getUsername(), gui.getTableID());
-    		}
-    		
-    		//gui.getPlayer().clearPlayerHand();
+    		gui.getClient().sendClearHandMessage(gui.getPlayer().getUsername(), gui.getTableID());
+    		gui.getPlayer().clearPlayerHand();
     		
     		updatePanel();
     	});
