@@ -41,7 +41,7 @@ public class LoginPanel extends JPanel {
 		loginButton.setAlignmentX(CENTER_ALIGNMENT);
 		
 		loginButton.addActionListener( e -> {
-			boolean successConnection = gui.getClient().connectToServer("localhost", 7777);
+			boolean successConnection = gui.getClient().connectToServer("134.154.38.70", 7777);
 			
 			if (successConnection == false) {
 				JOptionPane.showMessageDialog(null, "Connection Failed", "Login Unsuccessful", JOptionPane.ERROR_MESSAGE);
