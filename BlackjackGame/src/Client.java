@@ -287,6 +287,8 @@ public class Client {
     	case CREATE_TABLE:
     		if (msg.getTableID() != -1) {
     			gui.setTableID(msg.getTableID());
+    			Table newTable = new Table();
+      	        gui.setTable(newTable);
     			gui.showTable();
     		} else {
     			JOptionPane.showMessageDialog(null, msg.getText(), "Table Creation Failed", JOptionPane.ERROR_MESSAGE);
