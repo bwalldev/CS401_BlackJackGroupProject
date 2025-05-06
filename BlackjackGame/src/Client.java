@@ -307,6 +307,10 @@ public class Client {
    		 	//gui.getPlayer().addCardToHand(card); 
 
    		 	gui.addCardToPlayerHand(card);
+   		 	
+   		 	if (gui.getPlayer().getHandValue() > 21) {
+   		 		JOptionPane.showMessageDialog(null, "YOU BUSTED! SORRY LOSER!", "HAHAHAHAHA", JOptionPane.INFORMATION_MESSAGE);
+   		 	}
     		break;
     	case REQUEST_HIT:
     		gui.addHitRequest(msg.getUsername());
