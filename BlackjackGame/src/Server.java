@@ -216,8 +216,11 @@ public class Server {
 			Card card = tables.get(incomingMessage.getTableID()).hitPlayer();
 			
 			// need to add card to players hand
-			if (card != null)
+			if (card != null) {
 			    getLoggedInDealer(incomingMessage.getUsername()).addCardToHand(card);
+			    
+			    Message outMessage = new Message(MessageType.RECEIVE_HIT, incomingMessage.getUsername(), "", incomingMessage.getBalance(), "", "Server", card, incomingMessage.getTableID());
+			}
 		}
 		
 		private void handleRequestHitMessage(Message incomingMessage) {

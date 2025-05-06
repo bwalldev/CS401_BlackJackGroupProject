@@ -17,5 +17,6 @@ public enum MessageType {
 	TABLE_COUNT,
 	TABLE_FULL,
 	NO_DEALER,
-	REQUEST_HIT
+	REQUEST_HIT,
+	RECEIVE_HIT
 }
