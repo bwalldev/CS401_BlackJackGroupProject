@@ -151,12 +151,10 @@ public class Server {
 					handleCloseTable(incomingMessage);
 					break;
 				case HIT:
-					handleHitMessage(incomingMessage);
-					
+					handleHit(incomingMessage);
 					break;
 				case REQUEST_HIT:
-					handleRequestHitMessage(incomingMessage);
-					
+					handleRequestHit(incomingMessage);
 					break;
 				case STAY:
 					
@@ -212,19 +210,37 @@ public class Server {
 			return null;
 		}
 		
-		private void handleHitMessage(Message incomingMessage) {
-			Card card = tables.get(incomingMessage.getTableID()).hitPlayer();
+		private void handleHit(Message incomingMessage) throws IOException {
+			int tableID = incomingMessage.getTableID();
+			String playerName = incomingMessage.getUsername();
+			Card card = incomingMessage.getCard();
 			
-			// need to add card to players hand
-			if (card != null) {
-			    getLoggedInDealer(incomingMessage.getUsername()).addCardToHand(card);
-			    
-			    Message outMessage = new Message(MessageType.RECEIVE_HIT, incomingMessage.getUsername(), "", incomingMessage.getBalance(), "", "Server", card, incomingMessage.getTableID());
-			}
+			Player player = getLoggedInPlayer(playerName);
+			
+			player.addCardToHand(card);
+			
+			Message addCard = new Message(MessageType.HIT, playerName, null, player.getBalance(), "You received: " + card.getSymbol() + "of" + card.getSuit(), "Server", card, tableID);
+			
+			  ObjectOutputStream playerOut = getStreamForUser(playerName);
+			    if (playerOut != null) {
+			        playerOut.writeObject(addCard);
+			        playerOut.flush();
+			    }
 		}
 		
-		private void handleRequestHitMessage(Message incomingMessage) {
+		private void handleRequestHit(Message incomingMessage) throws IOException {
+			int tableID = incomingMessage.getTableID();
+			Table table = tables.get(tableID);
 			
+			// Finds dealer at the table
+			Dealer dealer = table.getDealer();
+			ObjectOutputStream dealerOut = getStreamForUser(dealer.getUsername());
+			
+			// Forwards hit request to the dealer
+			if (dealerOut != null) {
+				dealerOut.writeObject(incomingMessage);
+				dealerOut.flush();
+			}
 		}
 		
 		
@@ -393,7 +409,6 @@ public class Server {
 				
 				if (table.getDealer() == null) {
 					table.setDealer(dealer);
-					table.setGame(new Game(new ArrayList<Player>(), dealer, 6));
 					dealer.setTableID(i);
 					
 					

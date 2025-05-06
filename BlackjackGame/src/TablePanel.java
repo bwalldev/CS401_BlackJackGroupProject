@@ -9,16 +9,21 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TablePanel extends JPanel {
 	private GUI gui;
 	JLabel tableIDLabel;
+	private List<String> pendingHitRequests = new ArrayList<>();
+	private JPanel hitRequestPanel = new JPanel();
 	
     public TablePanel(GUI gui) {
-    	this.gui = gui;
-        this.setBackground(Color.GREEN);
-        this.setLayout(new BorderLayout());
-
+       this.gui = gui;
+       this.setBackground(Color.GREEN);
+       this.setLayout(new BorderLayout());
+       hitRequestPanel.setLayout(new BoxLayout(hitRequestPanel, BoxLayout.Y_AXIS));
+       hitRequestPanel.setBackground(new Color(0, 51, 0));
        this.tableIDLabel = new JLabel("");
        
        this.add(tableIDLabel);
@@ -99,8 +104,13 @@ public class TablePanel extends JPanel {
     	    });
     	}
     	
+    	this.add(hitRequestPanel, BorderLayout.CENTER);
+    	updateHitRequestPanel();
+    	
     	hitButton.addActionListener(e -> {
-    		gui.getClient().sendHitMessage(gui.getPlayer().getUsername(), null, gui.getTableID());
+    		String username = gui.getPlayer().getUsername();
+    		int tableID = gui.getTableID();
+    		gui.getClient().sendRequestHitMessage(username, tableID);
     	});
     	
     	hitButton.addActionListener(e -> {
@@ -115,4 +125,43 @@ public class TablePanel extends JPanel {
     	this.revalidate();
     	this.repaint();
     }
+    
+    
+    public void addPendingHitRequest(String playerName) {
+        pendingHitRequests.add(playerName);
+        updateHitRequestPanel();
+    }
+    
+    public void addCardToPlayer(Card card) {
+    	 gui.getPlayer().addCardToHand(card);
+
+    	   
+    	 this.removeAll();
+    	 updatePanel();
+    }
+    
+    public void updateHitRequestPanel() {
+        hitRequestPanel.removeAll();
+
+        for (int i = 0; i < pendingHitRequests.size(); i++) {
+        	String playerName = pendingHitRequests.get(i);
+        	
+            JButton dealCardButton = new JButton("Give card to " + playerName);
+            int index = i;
+            dealCardButton.addActionListener(e -> {
+                
+                Card card = gui.getTable().getGame().getShoe().getCard();
+                gui.getClient().sendHitMessage(playerName, card, gui.getTableID());
+
+                // Remove from pending list
+                pendingHitRequests.remove(index);
+                updateHitRequestPanel();
+            });
+            hitRequestPanel.add(dealCardButton);
+        }
+
+        hitRequestPanel.revalidate();
+        hitRequestPanel.repaint();
+    }
+    
 }
