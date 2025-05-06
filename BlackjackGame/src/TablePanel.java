@@ -33,6 +33,17 @@ public class TablePanel extends JPanel {
     	this.tableIDLabel.setText("Table ID: " + gui.getTableID());
     	this.add(this.tableIDLabel, BorderLayout.PAGE_START);
     	
+    	JPanel playersPanel = new JPanel();
+    	playersPanel.setLayout(new BoxLayout(playersPanel, BoxLayout.Y_AXIS));
+    	playersPanel.setPreferredSize(new Dimension(120, 200));
+    	playersPanel.setOpaque(true);
+    	playersPanel.setBackground(Color.DARK_GRAY);
+    	
+    	JLabel playersLabel = new JLabel("Players:");
+    	playersLabel.setForeground(Color.WHITE);
+    	
+    	playersPanel.add(playersLabel);
+    	
     	JPanel handPanel = new JPanel();
     	handPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
     	handPanel.setBackground(new Color(0, 61, 2));
@@ -90,6 +101,7 @@ public class TablePanel extends JPanel {
     	
     	this.add(handPanel, BorderLayout.PAGE_END);
     	this.add(menuPanel, BorderLayout.EAST);
+    	this.add(playersPanel, BorderLayout.WEST);
     	this.revalidate();
     	this.repaint();
     }
