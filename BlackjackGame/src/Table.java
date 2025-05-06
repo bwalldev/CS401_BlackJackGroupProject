@@ -6,12 +6,14 @@ public class Table {
     private int maxPlayers;
     private int maxDealers;
     private Game game;
+    private Shoe shoe;
 
     public Table() {
 	this.players = new ArrayList<>();
 	this.dealer = null;
 	this.maxPlayers = 6; //6 Players maximum per table
 	this.maxDealers = 1; //1 Dealer maximum per table
+	this.shoe = new Shoe(3);
 	this.game = new Game(this.players, this.dealer, this.maxPlayers);
     }
 
@@ -43,6 +45,10 @@ public class Table {
 
     public int getMaxDealers() {
     	return maxDealers;
+    }
+    
+    public Card hitPlayer() {
+    	return this.shoe.getCard();
     }
     
     public Game getGame() {

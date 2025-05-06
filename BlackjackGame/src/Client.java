@@ -67,8 +67,8 @@ public class Client {
   	  
   }
     
-    public void sendHitMessage(String username, Card card) {
-    	Message hitMessage = new Message(MessageType.HIT, username, null, 0, "Hit", "Client", card, -1);
+    public void sendHitMessage(String username, Card card, int tableID) {
+    	Message hitMessage = new Message(MessageType.HIT, username, null, 0, "Hit", "Client", card, tableID);
     	
     	try {
     		this.outStream.writeObject(hitMessage);

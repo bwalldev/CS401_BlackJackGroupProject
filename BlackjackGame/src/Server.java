@@ -213,7 +213,7 @@ public class Server {
 		}
 		
 		private void handleHitMessage(Message incomingMessage) {
-			Card card = tables.get(incomingMessage.getTableID()).getGame().getShoe().getCard();
+			Card card = tables.get(incomingMessage.getTableID()).hitPlayer();
 			
 			// need to add card to players hand
 			if (card != null)

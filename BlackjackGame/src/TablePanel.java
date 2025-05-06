@@ -100,7 +100,7 @@ public class TablePanel extends JPanel {
     	}
     	
     	hitButton.addActionListener(e -> {
-    		gui.getClient().sendHitMessage(gui.getPlayer().getUsername(), null);
+    		gui.getClient().sendHitMessage(gui.getPlayer().getUsername(), null, gui.getTableID());
     	});
     	
     	hitButton.addActionListener(e -> {
