@@ -320,6 +320,8 @@ public class Client {
    		 	
    		 	if (gui.getPlayer().getHandValue() > 21) {
    		 		JOptionPane.showMessageDialog(null, "YOU BUSTED! SORRY LOSER!", "HAHAHAHAHA", JOptionPane.INFORMATION_MESSAGE);
+   		 	} else if (gui.getPlayer().getHandValue() == 21) {
+   		 		JOptionPane.showMessageDialog(null, "YOU GOT 21 21 21! GOOD JOB!", "WEEEEEEEEE!", JOptionPane.INFORMATION_MESSAGE);
    		 	}
     		break;
     	case REQUEST_HIT:
