@@ -48,8 +48,12 @@ public class TablePanel extends JPanel {
     	menuPanel.setPreferredSize(new Dimension(120, HEIGHT));
     	menuPanel.setOpaque(false);
     	
-    	JLabel balanceLabel = new JLabel("Balance: $" + gui.getPlayer().getBalance());
-    	balanceLabel.setAlignmentX(JLabel.RIGHT_ALIGNMENT);
+    	if (!(gui.getPlayer() instanceof Dealer)) {
+    	    JLabel balanceLabel = new JLabel("Balance: $" + gui.getPlayer().getBalance());
+    	    balanceLabel.setAlignmentX(JLabel.RIGHT_ALIGNMENT);
+    	
+    	    menuPanel.add(balanceLabel);
+    	}
     	
     	JButton hitButton = new JButton("Hit");
     	hitButton.setPreferredSize(new Dimension(120, 30));
@@ -57,7 +61,6 @@ public class TablePanel extends JPanel {
     	JButton stayButton = new JButton("Stay");
     	stayButton.setPreferredSize(new Dimension(120, 30));
     	
-    	menuPanel.add(balanceLabel);
     	menuPanel.add(hitButton);
     	menuPanel.add(stayButton);
 
