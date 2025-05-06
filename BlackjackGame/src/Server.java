@@ -217,7 +217,7 @@ public class Server {
 			
 			// need to add card to players hand
 			if (card != null)
-			    getLoggedInPlayer(incomingMessage.getUsername()).addCardToHand(card);
+			    getLoggedInDealer(incomingMessage.getUsername()).addCardToHand(card);
 		}
 		
 		private void handleRequestHitMessage(Message incomingMessage) {
