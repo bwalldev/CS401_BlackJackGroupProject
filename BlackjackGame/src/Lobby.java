@@ -9,7 +9,7 @@ public class Lobby {
         this.maxTables = 3;
     }
 
-    public void addTable() {
+    public void addTable(Dealer dealer) {
         if(tables.size() < maxTables) {
             tables.add(new Table());
         }
@@ -18,7 +18,7 @@ public class Lobby {
     public void removeTable(Table table) {
         tables.remove(table);
     }
-    
+
     public int getTableCount() {
     	return tables.size();
     }
@@ -26,6 +26,5 @@ public class Lobby {
     public ArrayList<Table> getTables() {
     	return new ArrayList<>(tables); 
     }
-    
 }
   
