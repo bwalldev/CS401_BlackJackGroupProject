@@ -1,8 +1,11 @@
 package testing;
 import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.Test;
-
+import main.Hand;
+import main.Card;
+import main.Suit;
+import main.Symbol;
+import main.Shoe;
 class HandTest {
 
 	@Test
