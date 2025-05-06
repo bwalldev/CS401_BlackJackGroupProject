@@ -73,9 +73,13 @@ public class Hand {
 				this.aceAsEleven--;
 			}
 			
-			
-			if (this.handTotal > 21) 
+			if (this.handTotal == 21) {
+				this.hasBlackjack = true;
+			}
+			if (this.handTotal > 21) {
 				this.busted = true;
+				this.hasBlackjack = false;
+			}
 		}
 	}
 	

@@ -134,6 +134,19 @@ public class Client {
     	
     }
     
+    public void sendCloseTableMessage(String username, int tableID) {
+    	Message closeMessage = new Message(MessageType.CLOSE_TABLE, username, null, 0, "Close Table", "Client", null, tableID);
+    	
+    	try {
+    		this.outStream.writeObject(closeMessage);
+    		this.outStream.flush();
+    		
+    	} catch (IOException except) {
+    		except.printStackTrace();
+    	}
+    	
+    }
+    
     public void sendDepositMessage(String username, int balance) {
     	Message depositMessage = new Message(MessageType.DEPOSIT, username, null, balance, "Deposit", "Client", null, -1);
     	
@@ -254,6 +267,9 @@ public class Client {
     		gui.getCardLayout().show(gui.getMainPanel(), "table");
     		break;
     	case LEAVE_TABLE:
+    		JOptionPane.showMessageDialog(null, msg.getText(), "Leave Table", JOptionPane.INFORMATION_MESSAGE);
+    		gui.showLobby();
+    		gui.getCardLayout().show(gui.getMainPanel(), "lobby");
     		break;
     		
     	case CREATE_TABLE:
