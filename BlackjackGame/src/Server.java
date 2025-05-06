@@ -156,6 +156,9 @@ public class Server {
 				case REQUEST_HIT:
 					handleRequestHit(incomingMessage);
 					break;
+				case CLEAR_HANDS:
+					handleClearHands(incomingMessage);
+					break;
 				case STAY:
 					
 					break;
@@ -208,6 +211,20 @@ public class Server {
 				}
 			}
 			return null;
+		}
+		
+		private void handleClearHands(Message incomingMessage) throws IOException {
+			int tableID = incomingMessage.getTableID();
+			Table table = tables.get(incomingMessage.getTableID());
+			for (Player player : table.getPlayers()) {
+				player.clearPlayerHand();
+				
+				Message outMessage = new Message(MessageType.CLEAR_HANDS, incomingMessage.getUsername(), "", incomingMessage.getBalance(), "", "Server", null, incomingMessage.getTableID());
+				
+				this.outStream.writeObject(outMessage);
+				this.outStream.flush();
+			}
+			
 		}
 		
 		private void handleHit(Message incomingMessage) throws IOException {

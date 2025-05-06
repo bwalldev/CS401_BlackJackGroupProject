@@ -40,6 +40,18 @@ public class GUI extends JFrame {
 		this.setVisible(true);
 	}
 	
+	public void clearHands() {
+		this.player.clearPlayerHand();
+		
+		if (this.table != null) {
+	        for (int i = 0; i < this.table.getNumPlayers(); i++) {
+	            this.table.getPlayers().get(i).clearPlayerHand();
+	        }
+	    }
+
+	    this.tablePanel.updatePanel();
+	}
+	
 	public void setClient(Client client) {
 		this.client = client;
 	}
