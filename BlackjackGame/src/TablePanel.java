@@ -40,6 +40,7 @@ public class TablePanel extends JPanel {
     	playersPanel.setBackground(Color.DARK_GRAY);
     	
     	JLabel playersLabel = new JLabel("Players:");
+    	playersLabel.setFont(new Font("Ariel", Font.BOLD, 20));
     	playersLabel.setForeground(Color.WHITE);
     	
     	playersPanel.add(playersLabel);
@@ -77,6 +78,7 @@ public class TablePanel extends JPanel {
 
     	JButton leaveButton;
     	
+    	// Checking which version of the leave table button to display depending if it's a Player or Dealer viewing the panel
     	if (gui.getPlayer() instanceof Dealer) {
     	    // Show Close Table only for Dealer
     	    leaveButton = new JButton("Close Table");
@@ -96,6 +98,14 @@ public class TablePanel extends JPanel {
     	        gui.getClient().sendLeaveTableMessage(username, tableID);
     	    });
     	}
+    	
+    	hitButton.addActionListener(e -> {
+    		gui.getClient().sendHitMessage(gui.getPlayer().getUsername(), null);
+    	});
+    	
+    	hitButton.addActionListener(e -> {
+    		
+    	});
     	
     	menuPanel.add(leaveButton);
     	
