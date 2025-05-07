@@ -2,10 +2,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -14,15 +17,20 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 public class LobbyPanel extends JPanel {
+	private Image background;
 	private GUI gui;
 	
 	public LobbyPanel(GUI gui) {
-		this.gui = gui;
-		this.setBackground(Color.GREEN);
-		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		
-		this.updatePanel();
+	    this.gui = gui;
+	    
+	    background = new ImageIcon(getClass().getResource("/background.jpg")).getImage();
+
+        this.setOpaque(false);
+	    this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+	    this.updatePanel();
 	}
+
 	
 	/*
 	public LobbyPanel(GUI gui) {
@@ -98,7 +106,8 @@ public class LobbyPanel extends JPanel {
 		this.removeAll();
 		
 		JLabel title = new JLabel("Table Lobby");
-		title.setFont(new Font("Times New Roman", Font.BOLD, 25));
+		title.setFont(new Font("broadway", Font.BOLD, 35));
+		title.setForeground(Color.white);
 		title.setAlignmentX(CENTER_ALIGNMENT);
 		title.setAlignmentY(CENTER_ALIGNMENT);
 		
@@ -123,6 +132,7 @@ public class LobbyPanel extends JPanel {
 		lobbyButtons.add(lobbyButton2);
 		lobbyButtons.add(lobbyButton3);
 		
+		this.add(Box.createVerticalStrut(40));
 		this.add(title);
 		
 		if(!(gui.getPlayer() instanceof Dealer)) {
@@ -130,12 +140,14 @@ public class LobbyPanel extends JPanel {
 			    int tableCount = gui.getClient().getTableCountMessage();
 			
 			    for (int i = 0; i < tableCount; i++) {
+			    	this.add(Box.createVerticalStrut(30));
 				    this.add(lobbyButtons.get(i));
 			    }
 			}
 		}
 		else {
 			if (gui.getClient().getLoggedIn()) {
+				this.add(Box.createVerticalStrut(30));
 				this.add(createTableButton);
 			}
 		}
@@ -176,4 +188,12 @@ public class LobbyPanel extends JPanel {
 		this.revalidate();
 		this.repaint();
 	}
+	@Override
+	protected void paintComponent(Graphics g) {
+	    super.paintComponent(g);
+	    if (background != null) {
+	        g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
+	    }
+	}
+
 }

@@ -74,7 +74,7 @@ public class LoginPanel extends JPanel {
 		this.add(usernameField);
 		this.add(passwordLabel);
 		this.add(passwordField);
-		//this.add(Box.createVerticalStrut(20));
+		this.add(Box.createVerticalStrut(20));
 		this.add(loginButton);
 	}
 
