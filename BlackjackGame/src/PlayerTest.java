@@ -102,13 +102,13 @@ public class PlayerTest {
 		player.setHand(card1, card2);
 		player.stay();
 		player.clearPlayerHand();
-		assertEquals(0, player.getHand().getCard.size());
+		assertEquals(0, player.getHand().getCards().size());
 		assertFalse(player.hasStayed());
 	}
 	
 	@Test
 	void testUniqueIDs() {
 		Player p2 = new Player("Another", "Password", 200);
-		assertNotEquals(players.getId(), p2.getID());
+		assertNotEquals(player.getID(), p2.getID());
 	}
 }
