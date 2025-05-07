@@ -3,8 +3,12 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -17,10 +21,17 @@ public class TablePanel extends JPanel {
 	JLabel tableIDLabel;
 	private List<String> pendingHitRequests = new ArrayList<>();
 	private JPanel hitRequestPanel = new JPanel();
+	private BufferedImage background;
 	
     public TablePanel(GUI gui) {
-       this.gui = gui;
-       this.setBackground(Color.GREEN);
+       this.gui = gui; 
+   		try {
+   			background = ImageIO.read(getClass().getResource("backgound_1.jpg")); 
+   		} catch (IOException e) {
+   			e.printStackTrace();
+   		}
+
+   		setOpaque(false); 
        this.setLayout(new BorderLayout());
        hitRequestPanel.setLayout(new BoxLayout(hitRequestPanel, BoxLayout.Y_AXIS));
        hitRequestPanel.setBackground(new Color(0, 51, 0));
@@ -37,14 +48,16 @@ public class TablePanel extends JPanel {
     	
     	this.tableIDLabel.setText("Table ID: " + gui.getTableID());
     	this.add(this.tableIDLabel, BorderLayout.PAGE_START);
+    	tableIDLabel.setFont(new Font("Ariel", Font.BOLD, 15));
+    	tableIDLabel.setForeground(Color.black);
     	
     	JPanel playersPanel = new JPanel();
     	playersPanel.setLayout(new BoxLayout(playersPanel, BoxLayout.Y_AXIS));
     	playersPanel.setPreferredSize(new Dimension(120, 200));
     	playersPanel.setOpaque(true);
-    	playersPanel.setBackground(Color.DARK_GRAY);
+    	playersPanel.setBackground(Color.GRAY);
     	
-    	JLabel playersLabel = new JLabel("Players:");
+    	JLabel playersLabel = new JLabel("Players: ");
     	playersLabel.setFont(new Font("Ariel", Font.BOLD, 20));
     	playersLabel.setForeground(Color.WHITE);
     	
@@ -183,5 +196,14 @@ public class TablePanel extends JPanel {
         hitRequestPanel.revalidate();
         hitRequestPanel.repaint();
     }
+    @Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		if (background != null) {
+	
+			g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
+		
+		}
+	}
     
 }
