@@ -1,11 +1,13 @@
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -14,15 +16,21 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 public class LobbyPanel extends JPanel {
+	private Image background;
 	private GUI gui;
 	
 	public LobbyPanel(GUI gui) {
-		this.gui = gui;
-		this.setBackground(Color.GREEN);
-		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		
-		this.updatePanel();
+	    this.gui = gui;
+	    
+	    // Load the background image
+	    background = new ImageIcon("background.jpg").getImage();
+
+	    // Set layout and add components
+	    this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+	    this.updatePanel();
 	}
+
 	
 	/*
 	public LobbyPanel(GUI gui) {
@@ -176,4 +184,14 @@ public class LobbyPanel extends JPanel {
 		this.revalidate();
 		this.repaint();
 	}
+	@Override
+	protected void paintComponent(Graphics g) {
+	    super.paintComponent(g);
+
+	    // Draw background image, scaled to fit the panel
+	    if (background != null) {
+	        g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
+	    }
+	}
+
 }
