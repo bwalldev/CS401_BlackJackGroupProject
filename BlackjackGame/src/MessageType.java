@@ -20,4 +20,5 @@ public enum MessageType {
 	NO_DEALER,
 	RECEIVE_HIT,
 	CLEAR_HANDS
+	
 }
