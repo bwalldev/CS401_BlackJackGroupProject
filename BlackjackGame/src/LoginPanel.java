@@ -78,6 +78,7 @@ public class LoginPanel extends JPanel {
 		this.add(loginButton);
 	}
 
+	
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);

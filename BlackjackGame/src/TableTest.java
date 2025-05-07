@@ -36,6 +36,7 @@ class TableTest {
 		assertEquals(table.getMaxPlayers(), table.getNumPlayers());
 	}
 	
+	
 	@Test
 	void testRemovePlayer() {
 		table.addPlayer(player1);
