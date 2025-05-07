@@ -54,13 +54,13 @@ public class PlayerTest {
 	@Test
 	void testSetCurrBetExceedingBalance() {
 		player.setCurrBet(60000);
-		assertEquals)0, player.getCurrBet()); //should remain 0
+		assertEquals(0, player.getCurrBet()); //should remain 0
 	}
 	
 	@Test
 	void testWithdrawalMoney() {
 		player.withdrawalMoney(1000);
-		assertEquals(1000), player.getBalance();
+		assertEquals(1000, player.getBalance());
 	}
 	
 	@Test
@@ -84,30 +84,31 @@ public class PlayerTest {
 	@Test
 	void testAddCardToHand() {
 		player.setHand(card1, card2);
-		player.addCardtoHand(extraCard);
+		player.addCardToHand(extraCard);
 		assertEquals(3, player.getHand().getCards().size());
 		assertEquals(22, player.getHandValue());
 	}
 	
 	@Test
 	void testStayAndHasStayed() {
-		assertFalse(player.hasTStayed());
+		assertFalse(player.hasStayed());
 		player.stay();
 		assertTrue(player.hasStayed());
 	}
 	
 	@Test
 	void testClearPlayerHand() {
-		player.setHand(card1, card20;
+		
+		player.setHand(card1, card2);
 		player.stay();
 		player.clearPlayerHand();
-		assertEquals(0, player.getHand().getCards.size());
+		assertEquals(0, player.getHand().getCards().size());
 		assertFalse(player.hasStayed());
 	}
 	
 	@Test
 	void testUniqueIDs() {
 		Player p2 = new Player("Another", "Password", 200);
-		assertNotEquals(players.getId(), p2.getID());
+		assertNotEquals(player.getID(), p2.getID());
 	}
 }
