@@ -291,6 +291,8 @@ public class Server {
 							Player newPlayer = new Player(username, password, balance);
 							Server.loggedInPlayers.add(newPlayer);
 							
+							System.out.println("Player " + username + " has logged in.");
+							
 							Message success = new Message(MessageType.LOGIN, username, password, balance, "Login successful.", null, null, -1 );
 		                    this.outStream.writeObject(success);
 		                    
@@ -321,6 +323,8 @@ public class Server {
 							if (getLoggedInDealer(username) == null) {
 								Dealer newDealer = new Dealer(username, password);
 								Server.loggedInDealers.add(newDealer);
+								
+								System.out.println("Dealer " + username + " has logged in");
 								
 								Message success = new Message(MessageType.LOGIN, username, password, 0, "Dealer login successful.", null, null, -1);
 								this.outStream.writeObject(success);
@@ -389,7 +393,7 @@ public class Server {
 			}
 			
 			// If Table is full, send a table full message
-			if (table.getPlayers().size() >= 2) {
+			if (table.getPlayers().size() >= 6) {
 				Message outMessage = new Message(MessageType.TABLE_FULL, "", "", 0, "Table " + (tableID + 1) + " is full", "Server", null, tableID);
 				
 				this.outStream.writeObject(outMessage);
