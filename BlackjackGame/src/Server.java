@@ -393,7 +393,7 @@ public class Server {
 			}
 			
 			// If Table is full, send a table full message
-			if (table.getPlayers().size() >= 2) {
+			if (table.getPlayers().size() >= 6) {
 				Message outMessage = new Message(MessageType.TABLE_FULL, "", "", 0, "Table " + (tableID + 1) + " is full", "Server", null, tableID);
 				
 				this.outStream.writeObject(outMessage);
