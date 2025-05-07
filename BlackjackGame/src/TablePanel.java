@@ -49,13 +49,13 @@ public class TablePanel extends JPanel {
     	this.tableIDLabel.setText("Table ID: " + gui.getTableID());
     	this.add(this.tableIDLabel, BorderLayout.PAGE_START);
     	tableIDLabel.setFont(new Font("Ariel", Font.BOLD, 15));
-    	tableIDLabel.setForeground(Color.black);
+    	tableIDLabel.setForeground(Color.WHITE);
     	
     	JPanel playersPanel = new JPanel();
     	playersPanel.setLayout(new BoxLayout(playersPanel, BoxLayout.Y_AXIS));
     	playersPanel.setPreferredSize(new Dimension(120, 200));
     	playersPanel.setOpaque(true);
-    	playersPanel.setBackground(Color.GRAY);
+    	playersPanel.setBackground(new Color(18, 17, 16));
     	
     	JLabel playersLabel = new JLabel("Players: ");
     	playersLabel.setFont(new Font("Ariel", Font.BOLD, 20));
