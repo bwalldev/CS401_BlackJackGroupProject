@@ -85,13 +85,9 @@ public class LoginPanel extends JPanel {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		if (background != null) {
-			Graphics2D g2d = (Graphics2D) g.create();
-			g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR); // smooth image scaling
-	        g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY); // better quality rendering
-	        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON); // smoother edges for shapes and text
-
-			g2d.drawImage(background, 0, 0, getWidth(), getHeight(), this);
-			g2d.dispose();
+	
+			g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
+		
 		}
 	}
 }
